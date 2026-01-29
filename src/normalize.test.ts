@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseRequest, normalizeUrl, ParsedRequest } from './normalize';
+import { parseRequest, normalizeUrl, buildR2Key } from './normalize';
 
 describe('parseRequest', () => {
   it('extracts URL from path', () => {
@@ -86,5 +86,43 @@ describe('normalizeUrl', () => {
     expect(
       normalizeUrl('https://Example.COM/My%20Page?utm_source=twitter#section')
     ).toBe('https://example.com/my page');
+  });
+});
+
+describe('buildR2Key', () => {
+  it('builds key for default modifiers', () => {
+    expect(buildR2Key('https://example.com', [])).toBe(
+      'screenshots/https://example.com/default/latest.png'
+    );
+  });
+
+  it('builds key with single modifier', () => {
+    expect(buildR2Key('https://example.com', ['full'])).toBe(
+      'screenshots/https://example.com/full/latest.png'
+    );
+  });
+
+  it('builds key with multiple modifiers sorted', () => {
+    expect(buildR2Key('https://example.com', ['mobile', 'full'])).toBe(
+      'screenshots/https://example.com/full-mobile/latest.png'
+    );
+  });
+
+  it('excludes refresh from key', () => {
+    expect(buildR2Key('https://example.com', ['refresh', 'full'])).toBe(
+      'screenshots/https://example.com/full/latest.png'
+    );
+  });
+
+  it('builds dated key', () => {
+    expect(buildR2Key('https://example.com', [], '2026-01-28')).toBe(
+      'screenshots/https://example.com/default/2026-01-28.png'
+    );
+  });
+
+  it('handles URL with path', () => {
+    expect(buildR2Key('https://example.com/some/page', [])).toBe(
+      'screenshots/https://example.com/some/page/default/latest.png'
+    );
   });
 });

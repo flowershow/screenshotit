@@ -1,5 +1,5 @@
 const VALID_MODIFIERS = ['full', 'mobile', 'refresh'] as const;
-type Modifier = (typeof VALID_MODIFIERS)[number];
+export type Modifier = (typeof VALID_MODIFIERS)[number];
 
 export interface ParsedRequest {
   targetUrl: string;
@@ -55,4 +55,23 @@ export function normalizeUrl(url: string): string {
   }
 
   return `${protocol}//${hostname}${port}${pathname}`;
+}
+
+export function buildR2Key(
+  normalizedUrl: string,
+  modifiers: Modifier[],
+  date?: string
+): string {
+  // Filter out refresh (it's not part of the storage key)
+  const storageModifiers = modifiers.filter((m) => m !== 'refresh');
+
+  // Sort modifiers alphabetically for consistent keys
+  const modifierPart =
+    storageModifiers.length > 0
+      ? storageModifiers.sort().join('-')
+      : 'default';
+
+  const filename = date ? `${date}.png` : 'latest.png';
+
+  return `screenshots/${normalizedUrl}/${modifierPart}/${filename}`;
 }
