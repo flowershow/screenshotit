@@ -1,3 +1,8 @@
+// src/index.ts
+import { parseRequest, normalizeUrl, buildR2Key, Modifier } from './normalize';
+import { getScreenshot, saveScreenshot, ScreenshotMetadata } from './storage';
+import { getViewportConfig, captureScreenshot } from './screenshot';
+
 export interface Env {
   SCREENSHOTS: R2Bucket;
   BROWSER: Fetcher;
@@ -5,6 +10,79 @@ export interface Env {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    return new Response('Screenshot service running');
+    const url = new URL(request.url);
+
+    // Handle root path
+    if (url.pathname === '/' || url.pathname === '') {
+      return new Response(
+        'Screenshot Service\n\nUsage: /<url> or /<url>@modifier\n\nModifiers: @full, @mobile, @refresh',
+        { status: 200 }
+      );
+    }
+
+    try {
+      // Parse the request
+      const parsed = parseRequest(url.pathname);
+      const normalizedUrl = normalizeUrl(parsed.targetUrl);
+      const r2Key = buildR2Key(normalizedUrl, parsed.modifiers);
+      const hasRefresh = parsed.modifiers.includes('refresh');
+
+      // Check cache (unless @refresh)
+      if (!hasRefresh) {
+        const cached = await getScreenshot(env.SCREENSHOTS, r2Key);
+        if (cached) {
+          return new Response(cached.data, {
+            headers: {
+              'Content-Type': 'image/png',
+              'Cache-Control': 'public, max-age=86400',
+              'X-Screenshot-Cached': 'true',
+              'X-Screenshot-Captured': cached.metadata.captured_at,
+            },
+          });
+        }
+      }
+
+      // Capture new screenshot
+      const viewport = getViewportConfig(parsed.modifiers);
+      const imageData = await captureScreenshot(env.BROWSER, {
+        url: normalizedUrl,
+        viewport,
+      });
+
+      // Prepare metadata
+      const metadata: ScreenshotMetadata = {
+        captured_at: new Date().toISOString(),
+        target_url: normalizedUrl,
+        modifiers: parsed.modifiers.filter((m) => m !== 'refresh').join(','),
+      };
+
+      // Save to R2
+      await saveScreenshot(env.SCREENSHOTS, r2Key, imageData, metadata);
+
+      // Return image
+      return new Response(imageData, {
+        headers: {
+          'Content-Type': 'image/png',
+          'Cache-Control': 'public, max-age=86400',
+          'X-Screenshot-Cached': 'false',
+          'X-Screenshot-Captured': metadata.captured_at,
+        },
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+
+      // Return appropriate error
+      if (message.includes('Unknown modifier') || message.includes('No URL')) {
+        return new Response(message, { status: 400 });
+      }
+
+      if (message.includes('Screenshot failed')) {
+        return new Response(`Failed to capture screenshot: ${message}`, {
+          status: 502,
+        });
+      }
+
+      return new Response(`Internal error: ${message}`, { status: 500 });
+    }
   },
 };
