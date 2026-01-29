@@ -1,0 +1,13 @@
+name = "screenshot-worker"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+ENVIRONMENT = "development"
+
+[[r2_buckets]]
+binding = "SCREENSHOTS"
+bucket_name = "screenshots"
+
+[browser]
+binding = "BROWSER"
