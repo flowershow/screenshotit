@@ -2,6 +2,7 @@
 import { parseRequest, normalizeUrl, buildR2Key, Modifier } from './normalize';
 import { getScreenshot, saveScreenshot, ScreenshotMetadata } from './storage';
 import { getViewportConfig, captureScreenshot } from './screenshot';
+import { checkRefreshRateLimit, recordRefresh } from './ratelimit';
 
 export interface Env {
   SCREENSHOTS: R2Bucket;
@@ -26,6 +27,20 @@ export default {
       const normalizedUrl = normalizeUrl(parsed.targetUrl);
       const r2Key = buildR2Key(normalizedUrl, parsed.modifiers);
       const hasRefresh = parsed.modifiers.includes('refresh');
+
+      // Check rate limit for refresh
+      if (hasRefresh) {
+        const allowed = await checkRefreshRateLimit(
+          env.SCREENSHOTS,
+          normalizedUrl,
+          parsed.modifiers
+        );
+        if (!allowed) {
+          return new Response('Refresh limit: once per day per URL', {
+            status: 429,
+          });
+        }
+      }
 
       // Check cache (unless @refresh)
       if (!hasRefresh) {
@@ -58,6 +73,11 @@ export default {
 
       // Save to R2
       await saveScreenshot(env.SCREENSHOTS, r2Key, imageData, metadata);
+
+      // Record refresh for rate limiting
+      if (hasRefresh) {
+        await recordRefresh(env.SCREENSHOTS, normalizedUrl, parsed.modifiers);
+      }
 
       // Return image
       return new Response(imageData, {
