@@ -8,6 +8,13 @@ ENVIRONMENT = "development"
 [[r2_buckets]]
 binding = "SCREENSHOTS"
 bucket_name = "screenshots"
+preview_bucket_name = "screenshots-dev"
 
+# Browser Rendering requires paid Workers plan
+# For local dev, you may need to mock this or use production
 [browser]
 binding = "BROWSER"
+
+[dev]
+port = 8787
+local_protocol = "http"
