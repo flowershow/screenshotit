@@ -28,7 +28,130 @@ What it’s for
 • Creating visual previews in Markdown-based sites
 • Preserving how a page looked *at the moment you cited it*
 
-What it’s not
-It’s not a screenshot editor, a dashboard, or a testing suite.
-It’s a primitive: **the web → image, via URL**.
+What it's not
+It's not a screenshot editor, a dashboard, or a testing suite.
+It's a primitive: **the web → image, via URL**.
+
+## Modifiers
+
+Append modifiers with `@` to customize screenshots:
+
+```
+screenshot.app/https://example.com@full      # Full page
+screenshot.app/https://example.com@mobile    # Mobile viewport
+screenshot.app/https://example.com@refresh   # Force fresh capture
+screenshot.app/https://example.com@full@mobile  # Combine them
+```
+
+## Development
+
+**Prerequisites:**
+- Node.js 18+
+- Cloudflare account (free tier works for development)
+
+**Setup:**
+
+```bash
+npm install
+```
+
+**Run locally:**
+
+```bash
+npm run dev
+```
+
+Note: Browser Rendering API doesn't work in local mode. Use `wrangler dev --remote` to test against Cloudflare's infrastructure (requires authentication).
+
+**Run tests:**
+
+```bash
+npm test
+```
+
+## Deployment
+
+### One-time Setup
+
+1. **Login to Cloudflare:**
+   ```bash
+   npx wrangler login
+   ```
+
+2. **Create R2 bucket:**
+   ```bash
+   npx wrangler r2 bucket create screenshots
+   ```
+
+3. **Enable Browser Rendering API:**
+   - Go to Cloudflare Dashboard → Workers & Pages → your account
+   - Browser Rendering requires a paid Workers plan ($5/month)
+
+### Deploy
+
+```bash
+npm run deploy
+```
+
+This deploys to `screenshot-worker.<your-subdomain>.workers.dev`.
+
+### Custom Domain
+
+To use a custom domain like `screenshot.app`:
+
+1. Add domain to Cloudflare (DNS must be on Cloudflare)
+2. Go to Workers & Pages → screenshot-worker → Settings → Triggers
+3. Add custom domain
+
+## CI/CD with GitHub Actions
+
+Automate deployments on push to main:
+
+1. **Create API token:**
+   - Cloudflare Dashboard → My Profile → API Tokens
+   - Create token with "Edit Cloudflare Workers" permission
+
+2. **Add GitHub secrets:**
+   - `CLOUDFLARE_API_TOKEN` - your API token
+   - `CLOUDFLARE_ACCOUNT_ID` - from Workers dashboard URL
+
+3. **Create `.github/workflows/deploy.yml`:**
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm ci
+
+      - run: npm test
+
+      - name: Deploy to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+```
+
+Now every push to `main` will run tests and deploy automatically.
+
+## Architecture
+
+Built on Cloudflare's edge infrastructure:
+
+- **Worker** - Request handling, URL parsing, caching logic
+- **Browser Rendering API** - Headless Chromium for screenshots
+- **R2** - Object storage for cached screenshots
 
