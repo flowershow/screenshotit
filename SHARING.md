@@ -1,3 +1,25 @@
+# ScreenshotIt
+
+**Screenshot any webpage via URL. No API keys, no SDK, no dashboard.**
+
+```
+screenshotit.app/https://example.com
+```
+
+That's it. The URL *is* the API. Embed it anywhere:
+
+```markdown
+![](https://screenshotit.app/https://example.com)
+```
+
+Add `@full` for full-page, `@mobile` for mobile viewport. Screenshots are cached; use `@refresh` to force update.
+
+Built on Cloudflare (Workers + Browser Rendering + R2). ~400 lines of TypeScript. Alpha release.
+
+**Try it:** https://screenshotit.app/https://example.com
+
+---
+
 # Building ScreenshotIt: URL-Native Screenshots
 
 What if taking a screenshot of any webpage was as simple as writing a URL?
