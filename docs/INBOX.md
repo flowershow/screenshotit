@@ -1,0 +1,1 @@
+- [ ] register screenshotit.app

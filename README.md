@@ -103,49 +103,19 @@ To use a custom domain like `screenshot.app`:
 2. Go to Workers & Pages → screenshot-worker → Settings → Triggers
 3. Add custom domain
 
-## CI/CD with GitHub Actions
+## Auto-Deploy with GitHub
 
-Automate deployments on push to main:
+Cloudflare can deploy automatically when you push to GitHub:
 
-1. **Create API token:**
-   - Cloudflare Dashboard → My Profile → API Tokens
-   - Create token with "Edit Cloudflare Workers" permission
+1. Go to Cloudflare Dashboard → Workers & Pages → Create
+2. Select "Connect to Git" and authorize GitHub
+3. Select your repository
+4. Configure build settings:
+   - Build command: `npm install`
+   - Deploy command: `npx wrangler deploy`
+5. Deploy
 
-2. **Add GitHub secrets:**
-   - `CLOUDFLARE_API_TOKEN` - your API token
-   - `CLOUDFLARE_ACCOUNT_ID` - from Workers dashboard URL
-
-3. **Create `.github/workflows/deploy.yml`:**
-
-```yaml
-name: Deploy
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - run: npm ci
-
-      - run: npm test
-
-      - name: Deploy to Cloudflare
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-```
-
-Now every push to `main` will run tests and deploy automatically.
+Now every push to `main` automatically deploys.
 
 ## Architecture
 

@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git check-ignore:*)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "Bash(npm install)",
+      "Bash(git -C /Users/rgrp/src/screenshot.app/.worktrees/v1-worker add:*)",
+      "Bash(git -C /Users/rgrp/src/screenshot.app/.worktrees/v1-worker commit -m \"feat: scaffold Cloudflare Worker project\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\")",
+      "WebFetch(domain:sparrow.cloudflare.com)",
+      "WebFetch(domain:dash.cloudflare.com)",
+      "Bash(timeout 10 npm run dev:*)",
+      "WebFetch(domain:eu-central-1-1.aws.cloud2.influxdata.com)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  }
+}
