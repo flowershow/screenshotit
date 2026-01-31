@@ -11,7 +11,8 @@
       "WebFetch(domain:sparrow.cloudflare.com)",
       "WebFetch(domain:dash.cloudflare.com)",
       "Bash(timeout 10 npm run dev:*)",
-      "WebFetch(domain:eu-central-1-1.aws.cloud2.influxdata.com)"
+      "WebFetch(domain:eu-central-1-1.aws.cloud2.influxdata.com)",
+      "Bash(npm install:*)"
     ]
   },
   "sandbox": {

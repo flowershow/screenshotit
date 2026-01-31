@@ -1,4 +1,6 @@
 // src/screenshot.ts
+import puppeteer from '@cloudflare/puppeteer';
+
 export interface ViewportConfig {
   width: number;
   height: number;
@@ -26,38 +28,39 @@ export interface CaptureOptions {
 }
 
 export async function captureScreenshot(
-  browser: Fetcher,
+  browserBinding: Fetcher,
   options: CaptureOptions
 ): Promise<Uint8Array> {
-  // Cloudflare Browser Rendering API endpoint
-  const browserEndpoint = 'https://browser.cloudflare.com';
+  // Launch browser using Cloudflare's Browser Rendering API
+  const browser = await puppeteer.launch(browserBinding);
 
-  const response = await browser.fetch(browserEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      url: options.url,
-      viewport: {
-        width: options.viewport.width,
-        height: options.viewport.height,
-        deviceScaleFactor: options.viewport.deviceScaleFactor,
-      },
-      screenshotOptions: {
-        type: 'png',
-        fullPage: options.viewport.fullPage,
-      },
+  try {
+    const page = await browser.newPage();
+
+    // Set viewport
+    await page.setViewport({
+      width: options.viewport.width,
+      height: options.viewport.height,
+      deviceScaleFactor: options.viewport.deviceScaleFactor,
+    });
+
+    // Navigate to URL and wait for network to settle
+    await page.goto(options.url, {
       waitUntil: 'networkidle0',
       timeout: 30000,
-    }),
-  });
+    });
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Screenshot failed: ${error}`);
+    // Small delay for fonts/animations to settle
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Take screenshot
+    const screenshot = await page.screenshot({
+      type: 'png',
+      fullPage: options.viewport.fullPage,
+    });
+
+    return new Uint8Array(screenshot);
+  } finally {
+    await browser.close();
   }
-
-  const arrayBuffer = await response.arrayBuffer();
-  return new Uint8Array(arrayBuffer);
 }
