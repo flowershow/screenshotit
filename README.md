@@ -9,7 +9,7 @@ Most screenshot tools are dashboards, APIs, or workflows you have to integrate. 
 
 You paste a link like:
 
-`screenshot.app/https://example.com`
+`screenshotit.app/https://example.com`
 
 and you get a real-browser screenshot you can embed anywhere—Markdown, blogs, wikis, notes, docs, or posts—without setup, SDKs, or UI.
 
@@ -37,10 +37,10 @@ It's a primitive: **the web → image, via URL**.
 Append modifiers with `@` to customize screenshots:
 
 ```
-screenshot.app/https://example.com@full      # Full page
-screenshot.app/https://example.com@mobile    # Mobile viewport
-screenshot.app/https://example.com@refresh   # Force fresh capture
-screenshot.app/https://example.com@full@mobile  # Combine them
+screenshotit.app/https://example.com@full      # Full page
+screenshotit.app/https://example.com@mobile    # Mobile viewport
+screenshotit.app/https://example.com@refresh   # Force fresh capture
+screenshotit.app/https://example.com@full@mobile  # Combine them
 ```
 
 ## Development
@@ -80,7 +80,7 @@ npm test
 
 2. **Create R2 bucket:**
    ```bash
-   npx wrangler r2 bucket create screenshots
+   npx wrangler r2 bucket create screenshotit
    ```
 
 3. **Enable Browser Rendering API:**
@@ -93,14 +93,14 @@ npm test
 npm run deploy
 ```
 
-This deploys to `screenshot-worker.<your-subdomain>.workers.dev`.
+This deploys to `screenshotit.<your-subdomain>.workers.dev`.
 
 ### Custom Domain
 
-To use a custom domain like `screenshot.app`:
+To use a custom domain like `screenshotit.app`:
 
 1. Add domain to Cloudflare (DNS must be on Cloudflare)
-2. Go to Workers & Pages → screenshot-worker → Settings → Triggers
+2. Go to Workers & Pages → screenshotit → Settings → Triggers
 3. Add custom domain
 
 ## Auto-Deploy with GitHub

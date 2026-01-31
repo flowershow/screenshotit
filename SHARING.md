@@ -1,12 +1,12 @@
-# Building screenshot.app: URL-Native Screenshots
+# Building ScreenshotIt: URL-Native Screenshots
 
 What if taking a screenshot of any webpage was as simple as writing a URL?
 
 ```
-screenshot.app/https://example.com
+screenshotit.app/https://example.com
 ```
 
-That's the idea behind screenshot.app. No API keys, no SDKs, no dashboards. Just a URL that returns an image.
+That's the idea behind screenshotit.app. No API keys, no SDKs, no dashboards. Just a URL that returns an image.
 
 ## The Problem
 
@@ -14,10 +14,10 @@ Most screenshot tools require you to integrate an API, manage credentials, handl
 
 ## The Solution
 
-screenshot.app treats screenshots as URLs. You construct a URL, and you get an image back. It's embeddable anywhere that accepts images: Markdown, wikis, static sites, note-taking apps.
+screenshotit.app treats screenshots as URLs. You construct a URL, and you get an image back. It's embeddable anywhere that accepts images: Markdown, wikis, static sites, note-taking apps.
 
 ```markdown
-![Example homepage](https://screenshot.app/https://example.com)
+![Example homepage](https://screenshotit.app/https://example.com)
 ```
 
 ## What We Built
@@ -48,10 +48,10 @@ So `https://Example.COM/My%20Page?ref=twitter#section` becomes `https://example.
 Options are passed via `@modifier` syntax:
 
 ```
-screenshot.app/https://example.com@full      # Full page screenshot
-screenshot.app/https://example.com@mobile   # Mobile viewport (390x844)
-screenshot.app/https://example.com@refresh  # Force fresh capture
-screenshot.app/https://example.com@full@mobile  # Combine them
+screenshotit.app/https://example.com@full      # Full page screenshot
+screenshotit.app/https://example.com@mobile   # Mobile viewport (390x844)
+screenshotit.app/https://example.com@refresh  # Force fresh capture
+screenshotit.app/https://example.com@full@mobile  # Combine them
 ```
 
 Modifiers are sorted alphabetically in storage keys for consistency (`full-mobile`, not `mobile-full`).
