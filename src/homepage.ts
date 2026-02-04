@@ -10,7 +10,7 @@ export function renderHomepage(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCREENSHOT•IT by Datopian</title>
+  <title>SCREENSHOT•IT by Datopian Data Co</title>
   <meta name="description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,27 +46,29 @@ export function renderHomepage(): string {
       letter-spacing: 2px;
       text-transform: uppercase;
       color: #111;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .site-name .credit {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: #888;
+    }
+
+    .site-name .credit a {
+      color: #888;
+      text-decoration: none;
+    }
+
+    .site-name .credit a:hover {
+      text-decoration: underline;
     }
 
     .site-tagline {
       font-size: 14px;
       color: #111;
-      margin-bottom: 8px;
-    }
-
-    .site-credit {
-      font-size: 13px;
-      color: #888;
-    }
-
-    .site-credit a {
-      color: #888;
-      text-decoration: none;
-    }
-
-    .site-credit a:hover {
-      text-decoration: underline;
     }
 
     /* Hero */
@@ -442,9 +444,8 @@ export function renderHomepage(): string {
 <body>
   <div class="container">
     <div class="site-header">
-      <div class="site-name">Screenshot•It</div>
+      <div class="site-name">Screenshot•It <span class="credit">by <a href="https://datopian.com/">Datopian Data Co</a></span></div>
       <div class="site-tagline">The URL is the screenshot.</div>
-      <div class="site-credit">by <a href="https://datopian.com/">Datopian</a></div>
     </div>
 
     <div class="hero">
