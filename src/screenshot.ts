@@ -46,7 +46,7 @@ export async function captureScreenshot(
 
     // Navigate to URL and wait for network to settle
     await page.goto(options.url, {
-      waitUntil: 'networkidle0',
+      waitUntil: 'networkidle2',
       timeout: 30000,
     });
 
