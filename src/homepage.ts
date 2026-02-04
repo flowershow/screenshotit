@@ -10,7 +10,7 @@ export function renderHomepage(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCREENSHOT•IT</title>
+  <title>SCREENSHOT•IT by Datopian</title>
   <meta name="description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,13 +36,37 @@ export function renderHomepage(): string {
       padding: 48px 24px;
     }
 
+    .site-header {
+      margin-bottom: 48px;
+    }
+
     .site-name {
-      font-size: 13px;
+      font-size: 18px;
       font-weight: 500;
       letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 48px;
       color: #111;
+      margin-bottom: 6px;
+    }
+
+    .site-tagline {
+      font-size: 14px;
+      color: #111;
+      margin-bottom: 8px;
+    }
+
+    .site-credit {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .site-credit a {
+      color: #888;
+      text-decoration: none;
+    }
+
+    .site-credit a:hover {
+      text-decoration: underline;
     }
 
     /* Hero */
@@ -93,11 +117,6 @@ export function renderHomepage(): string {
       border: 1px solid #ddd;
     }
 
-    .hero-tagline {
-      font-size: 15px;
-      color: #111;
-      margin-bottom: 24px;
-    }
 
     /* Sections */
     .section {
@@ -282,6 +301,33 @@ export function renderHomepage(): string {
       color: #888;
     }
 
+    .footer a {
+      color: #888;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-love {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .footer-love-title {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .footer-love-desc {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.7;
+    }
+
     @media (max-width: 600px) {
       .container {
         padding: 32px 20px;
@@ -315,14 +361,16 @@ export function renderHomepage(): string {
 </head>
 <body>
   <div class="container">
-    <div class="site-name">Screenshot•It</div>
+    <div class="site-header">
+      <div class="site-name">Screenshot•It</div>
+      <div class="site-tagline">The URL is the screenshot.</div>
+      <div class="site-credit">by <a href="https://datopian.com/">Datopian</a></div>
+    </div>
 
     <div class="hero">
       <div class="hero-typing">
         <span class="typed-text"></span><span class="cursor"></span>
       </div>
-
-      <p class="hero-tagline">The URL is the screenshot.</p>
 
       <div class="hero-screenshot" id="hero-screenshot">
         <a href="https://linear.app" target="_blank" rel="noopener">
@@ -390,7 +438,13 @@ export function renderHomepage(): string {
     <hr>
 
     <div class="footer">
-      Built on Cloudflare. Cached forever.
+      <div>Built on Cloudflare. Cached forever.</div>
+      <div><a href="https://datopian.com/">Screenshot•It by Datopian</a></div>
+
+      <div class="footer-love">
+        <div class="footer-love-title">With love from <a href="https://datopian.com/">Datopian</a></div>
+        <div class="footer-love-desc">Collectively, our team brings over 50 years of expertise designing, building, and scaling the world's leading data portals and infrastructure.</div>
+      </div>
     </div>
   </div>
 
