@@ -3,6 +3,7 @@ import { parseRequest, normalizeUrl, buildR2Key, Modifier } from './normalize';
 import { getScreenshot, saveScreenshot, ScreenshotMetadata } from './storage';
 import { getViewportConfig, captureScreenshot } from './screenshot';
 import { checkRefreshRateLimit, recordRefresh } from './ratelimit';
+import { renderHomepage } from './homepage';
 
 export interface Env {
   SCREENSHOTS: R2Bucket;
@@ -15,10 +16,10 @@ export default {
 
     // Handle root path
     if (url.pathname === '/' || url.pathname === '') {
-      return new Response(
-        'Screenshot Service\n\nUsage: /<url> or /<url>@modifier\n\nModifiers: @full, @mobile, @refresh',
-        { status: 200 }
-      );
+      return new Response(renderHomepage(), {
+        status: 200,
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
+      });
     }
 
     try {
