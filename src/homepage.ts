@@ -10,7 +10,7 @@ export function renderHomepage(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>screenshot•it</title>
+  <title>SCREENSHOT•IT</title>
   <meta name="description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,10 +37,11 @@ export function renderHomepage(): string {
     }
 
     .site-name {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      margin-bottom: 64px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 48px;
       color: #111;
     }
 
@@ -51,8 +52,8 @@ export function renderHomepage(): string {
 
     .hero-typing {
       font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 24px;
+      font-weight: 400;
+      margin-bottom: 16px;
       min-height: 1.6em;
     }
 
@@ -74,7 +75,6 @@ export function renderHomepage(): string {
       opacity: 0;
       transform: translateY(8px);
       transition: opacity 0.4s ease, transform 0.4s ease;
-      margin-bottom: 24px;
     }
 
     .hero-screenshot.visible {
@@ -90,12 +90,13 @@ export function renderHomepage(): string {
       width: 100%;
       height: auto;
       display: block;
-      border: 2px solid #111;
+      border: 1px solid #ddd;
     }
 
     .hero-tagline {
       font-size: 15px;
       color: #111;
+      margin-bottom: 24px;
     }
 
     /* Sections */
@@ -104,12 +105,15 @@ export function renderHomepage(): string {
     }
 
     .section-title {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
+      font-size: 15px;
+      font-weight: 500;
       margin-bottom: 20px;
       color: #111;
+    }
+
+    .section-title .hash {
+      color: #999;
+      margin-right: 6px;
     }
 
     .section-desc {
@@ -311,24 +315,24 @@ export function renderHomepage(): string {
 </head>
 <body>
   <div class="container">
-    <div class="site-name">screenshot•it</div>
+    <div class="site-name">Screenshot•It</div>
 
     <div class="hero">
       <div class="hero-typing">
         <span class="typed-text"></span><span class="cursor"></span>
       </div>
 
+      <p class="hero-tagline">The URL is the screenshot.</p>
+
       <div class="hero-screenshot" id="hero-screenshot">
-        <a href="https://example.com" target="_blank" rel="noopener">
-          <img src="/https://example.com" alt="Screenshot of example.com">
+        <a href="https://linear.app" target="_blank" rel="noopener">
+          <img src="/https://linear.app" alt="Screenshot of linear.app">
         </a>
       </div>
-
-      <p class="hero-tagline">The URL is the screenshot.</p>
     </div>
 
     <div class="section">
-      <div class="section-title">API</div>
+      <div class="section-title"><span class="hash">##</span>API</div>
       <div class="api-pattern">
         <code>screenshotit.app/<strong>{url}</strong></code>
       </div>
@@ -362,8 +366,8 @@ export function renderHomepage(): string {
     </div>
 
     <div class="section">
-      <div class="section-title">Embed anywhere</div>
-      <p class="section-desc">Use the URL directly in your content. No app, no upload—just paste.</p>
+      <div class="section-title"><span class="hash">##</span>Embed anywhere</div>
+      <p class="section-desc">No need to use an app or take a screenshot. Just use the URL.</p>
 
       <div class="embed-tabs">
         <button class="embed-tab active" data-tab="markdown">Markdown</button>
@@ -380,7 +384,7 @@ export function renderHomepage(): string {
         <button class="copy-btn" data-copy='<img src="https://screenshotit.app/example.com" alt="Screenshot">'>Copy</button>
       </div>
 
-      <p class="embed-note">Works in GitHub READMEs, Notion, wikis, blogs, docs—anywhere images render.</p>
+      <p class="embed-note">Works in GitHub READMEs, Markdown, HTML, wikis, blogs, docs—anywhere images render.</p>
     </div>
 
     <hr>
@@ -392,7 +396,7 @@ export function renderHomepage(): string {
 
   <script>
     // Typing animation
-    const text = 'screenshotit.app/example.com';
+    const text = 'screenshotit.app/linear.app';
     const typedEl = document.querySelector('.typed-text');
     const screenshotEl = document.getElementById('hero-screenshot');
     let i = 0;
