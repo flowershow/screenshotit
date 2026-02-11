@@ -12,6 +12,22 @@ export function renderHomepage(): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SCREENSHOT•IT by Datopian</title>
   <meta name="description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Screenshot•It — The URL is the screenshot.">
+  <meta property="og:description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard. Just paste a link, get an image.">
+  <meta property="og:image" content="https://screenshotit.app/screenshotit.app@social">
+  <meta property="og:image:width" content="2400">
+  <meta property="og:image:height" content="1260">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://screenshotit.app">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Screenshot•It — The URL is the screenshot.">
+  <meta name="twitter:description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard.">
+  <meta name="twitter:image" content="https://screenshotit.app/screenshotit.app@social">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
