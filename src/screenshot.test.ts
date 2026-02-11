@@ -27,4 +27,19 @@ describe('getViewportConfig', () => {
     expect(config.width).toBe(390);
     expect(config.fullPage).toBe(true);
   });
+
+  it('returns social preview dimensions with social modifier', () => {
+    const config = getViewportConfig(['social']);
+    expect(config.width).toBe(1200);
+    expect(config.height).toBe(630);
+    expect(config.deviceScaleFactor).toBe(2);
+    expect(config.fullPage).toBe(false);
+  });
+
+  it('social overrides mobile and full', () => {
+    const config = getViewportConfig(['social', 'mobile', 'full']);
+    expect(config.width).toBe(1200);
+    expect(config.height).toBe(630);
+    expect(config.fullPage).toBe(false);
+  });
 });

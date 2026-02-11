@@ -3,20 +3,20 @@
 **Screenshot any webpage via URL. No API keys, no SDK, no dashboard.**
 
 ```
-screenshotit.app/https://example.com
+screenshotit.app/example.com
 ```
 
 That's it. The URL *is* the API. Embed it anywhere:
 
 ```markdown
-![](https://screenshotit.app/https://example.com)
+![](https://screenshotit.app/example.com)
 ```
 
-Add `@full` for full-page, `@mobile` for mobile viewport. Screenshots are cached; use `@refresh` to force update.
+Add `@full` for full-page, `@mobile` for mobile viewport, `@social` for OG-sized social previews. Screenshots are cached; use `@refresh` to force update.
 
 Built on Cloudflare (Workers + Browser Rendering + R2). ~400 lines of TypeScript. Alpha release.
 
-**Try it:** https://screenshotit.app/https://example.com
+**Try it:** https://screenshotit.app/example.com
 
 ---
 
@@ -25,7 +25,7 @@ Built on Cloudflare (Workers + Browser Rendering + R2). ~400 lines of TypeScript
 What if taking a screenshot of any webpage was as simple as writing a URL?
 
 ```
-screenshotit.app/https://example.com
+screenshotit.app/example.com
 ```
 
 That's the idea behind screenshotit.app. No API keys, no SDKs, no dashboards. Just a URL that returns an image.
@@ -39,7 +39,7 @@ Most screenshot tools require you to integrate an API, manage credentials, handl
 screenshotit.app treats screenshots as URLs. You construct a URL, and you get an image back. It's embeddable anywhere that accepts images: Markdown, wikis, static sites, note-taking apps.
 
 ```markdown
-![Example homepage](https://screenshotit.app/https://example.com)
+![Example homepage](https://screenshotit.app/example.com)
 ```
 
 ## What We Built
@@ -58,22 +58,24 @@ The v1 implementation runs entirely on Cloudflare's edge infrastructure:
 
 All URLs are normalized before storage to ensure consistent caching:
 
+- **Protocol optional** — `screenshotit.app/example.com` and `screenshotit.app/https://example.com` resolve to the same screenshot and the same cache entry. HTTPS is assumed when no protocol is provided.
 - Query strings stripped (avoids tracking params like `?utm_source=...`)
 - Fragments stripped (don't affect rendering)
 - Entire URL lowercased (most servers are case-insensitive)
 - URL-decoded for readable storage keys
 
-So `https://Example.COM/My%20Page?ref=twitter#section` becomes `https://example.com/my page`.
+So `https://Example.COM/My%20Page?ref=twitter#section` becomes `https://example.com/my page`, and `Example.COM/My%20Page` produces the same result.
 
 ### Modifier System
 
 Options are passed via `@modifier` syntax:
 
 ```
-screenshotit.app/https://example.com@full      # Full page screenshot
-screenshotit.app/https://example.com@mobile   # Mobile viewport (390x844)
-screenshotit.app/https://example.com@refresh  # Force fresh capture
-screenshotit.app/https://example.com@full@mobile  # Combine them
+screenshotit.app/example.com@full        # Full page screenshot
+screenshotit.app/example.com@mobile      # Mobile viewport (390x844)
+screenshotit.app/example.com@social      # Social preview (1200x630)
+screenshotit.app/example.com@refresh     # Force fresh capture
+screenshotit.app/example.com@full@mobile # Combine them
 ```
 
 Modifiers are sorted alphabetically in storage keys for consistency (`full-mobile`, not `mobile-full`).
@@ -82,7 +84,20 @@ Modifiers are sorted alphabetically in storage keys for consistency (`full-mobil
 
 - **Desktop**: 1280x800 at 2x scale (produces 2560x1600 PNG)
 - **Mobile**: 390x844 at 2x scale (iPhone 14 dimensions)
+- **Social**: 1200x630 at 2x scale (produces 2400x1260 PNG, OG standard)
 - **Full page**: Captures entire scrollable height
+
+### Social Previews
+
+The `@social` modifier is purpose-built for Open Graph images. It captures at exactly 1200x630 — the standard used by Facebook, Twitter/X, LinkedIn, Discord, Slack, and iMessage for link previews. The 2x scale factor means the output PNG is 2400x1260, so previews render retina-sharp when platforms downscale to the display size.
+
+Use it as a drop-in `og:image`:
+
+```html
+<meta property="og:image" content="https://screenshotit.app/yoursite.com@social">
+```
+
+Every page gets a live social preview without any image generation pipeline.
 
 ### Rate Limiting
 
@@ -99,6 +114,8 @@ screenshots/
     full/
       latest.png
     mobile/
+      latest.png
+    social/
       latest.png
 ```
 
@@ -119,4 +136,4 @@ This is v1. Future possibilities:
 - **Language**: TypeScript
 - **Testing**: Vitest
 
-Total: ~400 lines of TypeScript, 32 tests, zero servers to manage.
+Total: ~400 lines of TypeScript, 36 tests, zero servers to manage.

@@ -30,6 +30,11 @@ describe('parseRequest', () => {
     expect(result.modifiers).toEqual(['refresh']);
   });
 
+  it('handles social modifier', () => {
+    const result = parseRequest('/https://example.com@social');
+    expect(result.modifiers).toEqual(['social']);
+  });
+
   it('handles empty path', () => {
     expect(() => parseRequest('/')).toThrow('No URL provided');
   });
@@ -117,6 +122,12 @@ describe('buildR2Key', () => {
   it('builds dated key', () => {
     expect(buildR2Key('https://example.com', [], '2026-01-28')).toBe(
       'screenshots/https://example.com/default/2026-01-28.png'
+    );
+  });
+
+  it('includes social in key', () => {
+    expect(buildR2Key('https://example.com', ['social'])).toBe(
+      'screenshots/https://example.com/social/latest.png'
     );
   });
 
