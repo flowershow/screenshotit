@@ -12,7 +12,7 @@ That's it. The URL *is* the API. Embed it anywhere:
 ![](https://screenshotit.app/https://example.com)
 ```
 
-Add `@full` for full-page, `@mobile` for mobile viewport. Screenshots are cached; use `@refresh` to force update.
+Add `@full` for full-page, `@mobile` for mobile viewport, `@social` for OG-sized social previews. Screenshots are cached; use `@refresh` to force update.
 
 Built on Cloudflare (Workers + Browser Rendering + R2). ~400 lines of TypeScript. Alpha release.
 
@@ -72,6 +72,7 @@ Options are passed via `@modifier` syntax:
 ```
 screenshotit.app/https://example.com@full      # Full page screenshot
 screenshotit.app/https://example.com@mobile   # Mobile viewport (390x844)
+screenshotit.app/https://example.com@social   # Social preview (1200x630)
 screenshotit.app/https://example.com@refresh  # Force fresh capture
 screenshotit.app/https://example.com@full@mobile  # Combine them
 ```
@@ -82,7 +83,20 @@ Modifiers are sorted alphabetically in storage keys for consistency (`full-mobil
 
 - **Desktop**: 1280x800 at 2x scale (produces 2560x1600 PNG)
 - **Mobile**: 390x844 at 2x scale (iPhone 14 dimensions)
+- **Social**: 1200x630 at 2x scale (produces 2400x1260 PNG, OG standard)
 - **Full page**: Captures entire scrollable height
+
+### Social Previews
+
+The `@social` modifier is purpose-built for Open Graph images. It captures at exactly 1200x630 — the standard used by Facebook, Twitter/X, LinkedIn, Discord, Slack, and iMessage for link previews. The 2x scale factor means the output PNG is 2400x1260, so previews render retina-sharp when platforms downscale to the display size.
+
+Use it as a drop-in `og:image`:
+
+```html
+<meta property="og:image" content="https://screenshotit.app/yoursite.com@social">
+```
+
+Every page gets a live social preview without any image generation pipeline.
 
 ### Rate Limiting
 
@@ -99,6 +113,8 @@ screenshots/
     full/
       latest.png
     mobile/
+      latest.png
+    social/
       latest.png
 ```
 
@@ -119,4 +135,4 @@ This is v1. Future possibilities:
 - **Language**: TypeScript
 - **Testing**: Vitest
 
-Total: ~400 lines of TypeScript, 32 tests, zero servers to manage.
+Total: ~400 lines of TypeScript, 36 tests, zero servers to manage.

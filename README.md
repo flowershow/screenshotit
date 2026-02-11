@@ -39,9 +39,20 @@ Append modifiers with `@` to customize screenshots:
 ```
 screenshotit.app/https://example.com@full      # Full page
 screenshotit.app/https://example.com@mobile    # Mobile viewport
+screenshotit.app/https://example.com@social    # Social preview (1200×630)
 screenshotit.app/https://example.com@refresh   # Force fresh capture
 screenshotit.app/https://example.com@full@mobile  # Combine them
 ```
+
+## Social Previews
+
+Need an `og:image` for link previews? Use `@social` to get a screenshot sized exactly for Open Graph — 1200×630 at 2x for retina-sharp previews on Twitter/X, Facebook, LinkedIn, Discord, Slack, and more.
+
+```html
+<meta property="og:image" content="https://screenshotit.app/yoursite.com@social">
+```
+
+That's it. No image generation pipeline, no Puppeteer server, no build step. Every page on your site gets a live social preview image just by referencing its URL.
 
 ## Development
 
