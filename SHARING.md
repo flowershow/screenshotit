@@ -137,3 +137,19 @@ This is v1. Future possibilities:
 - **Testing**: Vitest
 
 Total: ~400 lines of TypeScript, 36 tests, zero servers to manage.
+
+---
+
+## Tweet Options
+
+**Option 1 — Show don't tell:**
+
+> Just shipped screenshotit.app — screenshot any webpage by URL. No API key, no SDK, no dashboard. Just `screenshotit.app/example.com` and you get an image back. Embed it in Markdown, docs, wikis, anywhere. The URL is the API.
+
+**Option 2 — Problem/solution:**
+
+> Most screenshot tools need API keys, SDKs, or a dashboard. screenshotit.app needs a URL. That's it. `screenshotit.app/example.com` → screenshot. Add @full for full-page, @mobile for mobile, @social for OG images. Built on Cloudflare. ~400 lines of TypeScript.
+
+**Option 3 — Punchy/minimal (recommended):**
+
+> What if a screenshot was just a URL? `screenshotit.app/example.com` → image. Embed anywhere. Cached forever. No signup, no API key, no SDK. Just shipped it.
