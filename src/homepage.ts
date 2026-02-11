@@ -506,7 +506,7 @@ export function renderHomepage(): string {
 
       <div class="hero-screenshot" id="hero-screenshot">
         <a href="https://linear.app" target="_blank" rel="noopener">
-          <img src="/https://linear.app" alt="Screenshot of linear.app">
+          <img src="/linear.app" alt="Screenshot of linear.app">
         </a>
       </div>
     </div>
@@ -518,36 +518,37 @@ export function renderHomepage(): string {
       </div>
       <div class="api-examples">
         <div class="api-example">
-          <a href="/https://example.com">screenshotit.app/example.com</a>
+          <a href="/example.com">screenshotit.app/example.com</a>
           <span class="arrow">→</span>
           <span class="desc">Default viewport</span>
         </div>
         <div class="api-example">
-          <a href="/https://example.com@full">screenshotit.app/example.com@full</a>
+          <a href="/example.com@full">screenshotit.app/example.com@full</a>
           <span class="arrow">→</span>
           <span class="desc">Full page</span>
         </div>
         <div class="api-example">
-          <a href="/https://example.com@mobile">screenshotit.app/example.com@mobile</a>
+          <a href="/example.com@mobile">screenshotit.app/example.com@mobile</a>
           <span class="arrow">→</span>
           <span class="desc">Mobile (390×844)</span>
         </div>
         <div class="api-example">
-          <a href="/https://example.com@social">screenshotit.app/example.com@social</a>
+          <a href="/example.com@social">screenshotit.app/example.com@social</a>
           <span class="arrow">→</span>
           <span class="desc">Social preview (1200×630)</span>
         </div>
         <div class="api-example">
-          <a href="/https://example.com@full@mobile">screenshotit.app/example.com@full@mobile</a>
+          <a href="/example.com@full@mobile">screenshotit.app/example.com@full@mobile</a>
           <span class="arrow">→</span>
           <span class="desc">Combine modifiers</span>
         </div>
         <div class="api-example">
-          <a href="/https://example.com@refresh">screenshotit.app/example.com@refresh</a>
+          <a href="/example.com@refresh">screenshotit.app/example.com@refresh</a>
           <span class="arrow">→</span>
           <span class="desc">Force fresh capture</span>
         </div>
       </div>
+      <p class="embed-note">The protocol is optional — <code>screenshotit.app/example.com</code> and <code>screenshotit.app/https://example.com</code> resolve to the same screenshot. URLs are normalized (lowercased, query strings and fragments stripped) so you always get a consistent cache hit.</p>
     </div>
 
     <div class="section">
@@ -579,7 +580,7 @@ export function renderHomepage(): string {
       <div class="social-demo">
         <div class="social-card">
           <div class="social-card-image">
-            <img src="/https://linear.app@social" alt="Social preview of linear.app" loading="lazy">
+            <img src="/linear.app@social" alt="Social preview of linear.app" loading="lazy">
           </div>
           <div class="social-card-body">
             <div class="social-card-domain">linear.app</div>
