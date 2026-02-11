@@ -1,4 +1,4 @@
-const VALID_MODIFIERS = ['full', 'mobile', 'refresh'] as const;
+const VALID_MODIFIERS = ['full', 'mobile', 'refresh', 'social'] as const;
 export type Modifier = (typeof VALID_MODIFIERS)[number];
 
 export interface ParsedRequest {

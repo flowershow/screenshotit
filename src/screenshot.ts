@@ -8,11 +8,21 @@ export interface ViewportConfig {
   fullPage: boolean;
 }
 
-type Modifier = 'full' | 'mobile' | 'refresh';
+type Modifier = 'full' | 'mobile' | 'refresh' | 'social';
 
 export function getViewportConfig(modifiers: Modifier[]): ViewportConfig {
+  const isSocial = modifiers.includes('social');
   const isMobile = modifiers.includes('mobile');
   const isFullPage = modifiers.includes('full');
+
+  if (isSocial) {
+    return {
+      width: 1200,
+      height: 630,
+      deviceScaleFactor: 2,
+      fullPage: false,
+    };
+  }
 
   return {
     width: isMobile ? 390 : 1280,

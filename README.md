@@ -9,7 +9,7 @@ Most screenshot tools are dashboards, APIs, or workflows you have to integrate. 
 
 You paste a link like:
 
-`screenshotit.app/https://example.com`
+`screenshotit.app/example.com`
 
 and you get a real-browser screenshot you can embed anywhere—Markdown, blogs, wikis, notes, docs, or posts—without setup, SDKs, or UI.
 
@@ -37,11 +37,24 @@ It's a primitive: **the web → image, via URL**.
 Append modifiers with `@` to customize screenshots:
 
 ```
-screenshotit.app/https://example.com@full      # Full page
-screenshotit.app/https://example.com@mobile    # Mobile viewport
-screenshotit.app/https://example.com@refresh   # Force fresh capture
-screenshotit.app/https://example.com@full@mobile  # Combine them
+screenshotit.app/example.com@full        # Full page
+screenshotit.app/example.com@mobile      # Mobile viewport
+screenshotit.app/example.com@social      # Social preview (1200×630)
+screenshotit.app/example.com@refresh     # Force fresh capture
+screenshotit.app/example.com@full@mobile # Combine them
 ```
+
+The `https://` protocol is optional — `screenshotit.app/example.com` and `screenshotit.app/https://example.com` resolve to the same screenshot. URLs are normalized (lowercased, query strings and fragments stripped) for consistent caching.
+
+## Social Previews
+
+Need an `og:image` for link previews? Use `@social` to get a screenshot sized exactly for Open Graph — 1200×630 at 2x for retina-sharp previews on Twitter/X, Facebook, LinkedIn, Discord, Slack, and more.
+
+```html
+<meta property="og:image" content="https://screenshotit.app/yoursite.com@social">
+```
+
+That's it. No image generation pipeline, no Puppeteer server, no build step. Every page on your site gets a live social preview image just by referencing its URL.
 
 ## Development
 

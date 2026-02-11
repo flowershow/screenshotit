@@ -12,6 +12,22 @@ export function renderHomepage(): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SCREENSHOT•IT by Datopian Data Co</title>
   <meta name="description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Screenshot•It — The URL is the screenshot.">
+  <meta property="og:description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard. Just paste a link, get an image.">
+  <meta property="og:image" content="https://screenshotit.app/screenshotit.app@social">
+  <meta property="og:image:width" content="2400">
+  <meta property="og:image:height" content="1260">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://screenshotit.app">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Screenshot•It — The URL is the screenshot.">
+  <meta name="twitter:description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard.">
+  <meta name="twitter:image" content="https://screenshotit.app/screenshotit.app@social">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -291,6 +307,42 @@ export function renderHomepage(): string {
       margin-top: 16px;
     }
 
+    /* Social Preview */
+    .social-demo {
+      margin: 20px 0;
+    }
+
+    .social-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 480px;
+      background: #fff;
+    }
+
+    .social-card-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .social-card-body {
+      padding: 12px 16px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .social-card-domain {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 2px;
+    }
+
+    .social-card-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #111;
+    }
+
     /* Footer */
     hr {
       border: none;
@@ -455,7 +507,7 @@ export function renderHomepage(): string {
 
       <div class="hero-screenshot" id="hero-screenshot">
         <a href="https://linear.app" target="_blank" rel="noopener">
-          <img src="/https://linear.app" alt="Screenshot of linear.app">
+          <img src="/linear.app" alt="Screenshot of linear.app">
         </a>
       </div>
     </div>
@@ -467,31 +519,37 @@ export function renderHomepage(): string {
       </div>
       <div class="api-examples">
         <div class="api-example">
-          <a href="/https://example.com">screenshotit.app/example.com</a>
+          <a href="/example.com">screenshotit.app/example.com</a>
           <span class="arrow">→</span>
           <span class="desc">Default viewport</span>
         </div>
         <div class="api-example">
-          <a href="/https://example.com@full">screenshotit.app/example.com@full</a>
+          <a href="/example.com@full">screenshotit.app/example.com@full</a>
           <span class="arrow">→</span>
           <span class="desc">Full page</span>
         </div>
         <div class="api-example">
-          <a href="/https://example.com@mobile">screenshotit.app/example.com@mobile</a>
+          <a href="/example.com@mobile">screenshotit.app/example.com@mobile</a>
           <span class="arrow">→</span>
           <span class="desc">Mobile (390×844)</span>
         </div>
         <div class="api-example">
-          <a href="/https://example.com@full@mobile">screenshotit.app/example.com@full@mobile</a>
+          <a href="/example.com@social">screenshotit.app/example.com@social</a>
+          <span class="arrow">→</span>
+          <span class="desc">Social preview (1200×630)</span>
+        </div>
+        <div class="api-example">
+          <a href="/example.com@full@mobile">screenshotit.app/example.com@full@mobile</a>
           <span class="arrow">→</span>
           <span class="desc">Combine modifiers</span>
         </div>
         <div class="api-example">
-          <a href="/https://example.com@refresh">screenshotit.app/example.com@refresh</a>
+          <a href="/example.com@refresh">screenshotit.app/example.com@refresh</a>
           <span class="arrow">→</span>
           <span class="desc">Force fresh capture</span>
         </div>
       </div>
+      <p class="embed-note">The protocol is optional — <code>screenshotit.app/example.com</code> and <code>screenshotit.app/https://example.com</code> resolve to the same screenshot. URLs are normalized (lowercased, query strings and fragments stripped) so you always get a consistent cache hit.</p>
     </div>
 
     <div class="section">
@@ -514,6 +572,44 @@ export function renderHomepage(): string {
       </div>
 
       <p class="embed-note">Works in GitHub READMEs, Markdown, HTML, wikis, blogs, docs—anywhere images render.</p>
+    </div>
+
+    <div class="section social-section">
+      <div class="section-title"><span class="hash">##</span>Social previews</div>
+      <p class="section-desc">Use <code>@social</code> to generate Open Graph images — perfect for link previews on Twitter/X, Facebook, LinkedIn, Discord, Slack, and iMessage.</p>
+
+      <div class="social-demo">
+        <div class="social-card">
+          <div class="social-card-image">
+            <img src="/linear.app@social" alt="Social preview of linear.app" loading="lazy">
+          </div>
+          <div class="social-card-body">
+            <div class="social-card-domain">linear.app</div>
+            <div class="social-card-title">Linear — Plan and build products</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="section-desc" style="margin-top: 20px;">Drop it straight into your meta tags:</p>
+
+      <div class="embed-tabs">
+        <button class="embed-tab active" data-tab="og">Open Graph</button>
+        <button class="embed-tab" data-tab="twitter">Twitter Card</button>
+      </div>
+
+      <div class="embed-content active" id="tab-og">
+        <div class="embed-code">&lt;meta property="og:image" content="https://screenshotit.app/yoursite.com@social"&gt;</div>
+        <button class="copy-btn" data-copy='<meta property="og:image" content="https://screenshotit.app/yoursite.com@social">'>Copy</button>
+      </div>
+
+      <div class="embed-content" id="tab-twitter">
+        <div class="embed-code">&lt;meta name="twitter:image" content="https://screenshotit.app/yoursite.com@social"&gt;
+&lt;meta name="twitter:card" content="summary_large_image"&gt;</div>
+        <button class="copy-btn" data-copy='<meta name="twitter:image" content="https://screenshotit.app/yoursite.com@social">
+<meta name="twitter:card" content="summary_large_image">'>Copy</button>
+      </div>
+
+      <p class="embed-note">Produces a 1200×630 viewport at 2x (2400×1260 output). Retina-sharp on every platform.</p>
     </div>
 
     <hr>
