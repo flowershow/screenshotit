@@ -688,6 +688,7 @@ export function renderHomepage(): string {
       });
     });
   </script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="9b2be64e-20be-426f-a213-1e6ef1260d05"></script>
 </body>
 </html>`;
 }
