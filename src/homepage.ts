@@ -506,7 +506,7 @@ export function renderHomepage(): string {
       </div>
 
       <div class="hero-screenshot" id="hero-screenshot">
-        <a href="https://linear.app" target="_blank" rel="noopener">
+        <a href="https://screenshotit.app/linear.app" target="_blank" rel="noopener">
           <img src="/linear.app" alt="Screenshot of linear.app">
         </a>
       </div>
