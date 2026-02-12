@@ -1,9 +1,12 @@
 const VALID_MODIFIERS = ['full', 'mobile', 'refresh', 'social'] as const;
 export type Modifier = (typeof VALID_MODIFIERS)[number];
 
+const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
 export interface ParsedRequest {
   targetUrl: string;
   modifiers: Modifier[];
+  date?: string;
 }
 
 export function parseRequest(path: string): ParsedRequest {
@@ -14,22 +17,32 @@ export function parseRequest(path: string): ParsedRequest {
     throw new Error('No URL provided');
   }
 
-  // Extract modifiers from the end
+  // Extract modifiers and date from the end
   const modifiers: Modifier[] = [];
+  let date: string | undefined;
   const parts = urlPart.split('@');
   urlPart = parts[0];
 
   for (let i = 1; i < parts.length; i++) {
-    const mod = parts[i].toLowerCase();
-    if (!VALID_MODIFIERS.includes(mod as Modifier)) {
-      throw new Error(`Unknown modifier: @${parts[i]}`);
+    const part = parts[i];
+    if (DATE_PATTERN.test(part)) {
+      if (date) {
+        throw new Error('Only one @date modifier allowed');
+      }
+      date = part;
+    } else {
+      const mod = part.toLowerCase();
+      if (!VALID_MODIFIERS.includes(mod as Modifier)) {
+        throw new Error(`Unknown modifier: @${part}`);
+      }
+      modifiers.push(mod as Modifier);
     }
-    modifiers.push(mod as Modifier);
   }
 
   return {
     targetUrl: urlPart,
     modifiers,
+    date,
   };
 }
 

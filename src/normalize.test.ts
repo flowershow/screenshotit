@@ -35,6 +35,26 @@ describe('parseRequest', () => {
     expect(result.modifiers).toEqual(['social']);
   });
 
+  it('extracts date modifier', () => {
+    const result = parseRequest('/https://example.com@2026-01-28');
+    expect(result.targetUrl).toBe('https://example.com');
+    expect(result.date).toBe('2026-01-28');
+    expect(result.modifiers).toEqual([]);
+  });
+
+  it('extracts date with other modifiers', () => {
+    const result = parseRequest('/https://example.com@full@2026-01-28');
+    expect(result.targetUrl).toBe('https://example.com');
+    expect(result.date).toBe('2026-01-28');
+    expect(result.modifiers).toEqual(['full']);
+  });
+
+  it('rejects multiple dates', () => {
+    expect(() =>
+      parseRequest('/https://example.com@2026-01-28@2026-01-29')
+    ).toThrow('Only one @date modifier allowed');
+  });
+
   it('handles empty path', () => {
     expect(() => parseRequest('/')).toThrow('No URL provided');
   });

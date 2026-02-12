@@ -548,8 +548,14 @@ export function renderHomepage(): string {
           <span class="arrow">→</span>
           <span class="desc">Force fresh capture</span>
         </div>
+        <div class="api-example">
+          <a href="/example.com@2026-01-28">screenshotit.app/example.com@2026-01-28</a>
+          <span class="arrow">→</span>
+          <span class="desc">Screenshot from a specific date</span>
+        </div>
       </div>
       <p class="embed-note">The protocol is optional — <code>screenshotit.app/example.com</code> and <code>screenshotit.app/https://example.com</code> resolve to the same screenshot. URLs are normalized (lowercased, query strings and fragments stripped) so you always get a consistent cache hit.</p>
+      <p class="embed-note">Use <code>@YYYY-MM-DD</code> to retrieve a screenshot from a specific date. If no screenshot exists for that exact date, the nearest earlier one is returned. Screenshots are saved daily, so only dates when a URL was captured are available.</p>
     </div>
 
     <div class="section">

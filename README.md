@@ -42,9 +42,12 @@ screenshotit.app/example.com@mobile      # Mobile viewport
 screenshotit.app/example.com@social      # Social preview (1200×630)
 screenshotit.app/example.com@refresh     # Force fresh capture
 screenshotit.app/example.com@full@mobile # Combine them
+screenshotit.app/example.com@2026-01-28  # Screenshot from a specific date
 ```
 
 The `https://` protocol is optional — `screenshotit.app/example.com` and `screenshotit.app/https://example.com` resolve to the same screenshot. URLs are normalized (lowercased, query strings and fragments stripped) for consistent caching.
+
+Use `@YYYY-MM-DD` to retrieve a screenshot from a specific date. If no screenshot exists for that exact date, the nearest earlier one is returned. Returns 404 only if no screenshots exist on or before the requested date.
 
 ## Social Previews
 

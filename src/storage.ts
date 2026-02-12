@@ -50,3 +50,24 @@ export async function saveScreenshot(
   const datedKey = latestKey.replace('latest.png', `${today}.png`);
   await bucket.put(datedKey, imageData, options);
 }
+
+export async function findNearestDate(
+  bucket: R2Bucket,
+  prefix: string,
+  beforeDate: string
+): Promise<string | null> {
+  const listed = await bucket.list({ prefix });
+  let nearest: string | null = null;
+
+  for (const object of listed.objects) {
+    const filename = object.key.split('/').pop() || '';
+    const match = filename.match(/^(\d{4}-\d{2}-\d{2})\.png$/);
+    if (!match) continue;
+    const date = match[1];
+    if (date < beforeDate && (!nearest || date > nearest)) {
+      nearest = date;
+    }
+  }
+
+  return nearest;
+}

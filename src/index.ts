@@ -1,6 +1,6 @@
 // src/index.ts
 import { parseRequest, normalizeUrl, buildR2Key, Modifier } from './normalize';
-import { getScreenshot, saveScreenshot, ScreenshotMetadata } from './storage';
+import { getScreenshot, saveScreenshot, findNearestDate, ScreenshotMetadata } from './storage';
 import { getViewportConfig, captureScreenshot } from './screenshot';
 import { checkRefreshRateLimit, recordRefresh } from './ratelimit';
 import { renderHomepage } from './homepage';
@@ -26,8 +26,46 @@ export default {
       // Parse the request
       const parsed = parseRequest(url.pathname);
       const normalizedUrl = normalizeUrl(parsed.targetUrl);
-      const r2Key = buildR2Key(normalizedUrl, parsed.modifiers);
+      const r2Key = buildR2Key(normalizedUrl, parsed.modifiers, parsed.date);
       const hasRefresh = parsed.modifiers.includes('refresh');
+
+      // Dated requests are read-only lookups
+      if (parsed.date) {
+        // Try exact date first
+        const cached = await getScreenshot(env.SCREENSHOTS, r2Key);
+        if (cached) {
+          return new Response(cached.data, {
+            headers: {
+              'Content-Type': 'image/png',
+              'Cache-Control': 'public, max-age=86400',
+              'X-Screenshot-Cached': 'true',
+              'X-Screenshot-Captured': cached.metadata.captured_at,
+            },
+          });
+        }
+        // Fall back to nearest earlier date
+        const prefix = r2Key.substring(0, r2Key.lastIndexOf('/') + 1);
+        const nearest = await findNearestDate(env.SCREENSHOTS, prefix, parsed.date);
+        if (nearest) {
+          const nearestKey = buildR2Key(normalizedUrl, parsed.modifiers, nearest);
+          const fallback = await getScreenshot(env.SCREENSHOTS, nearestKey);
+          if (fallback) {
+            return new Response(fallback.data, {
+              headers: {
+                'Content-Type': 'image/png',
+                'Cache-Control': 'public, max-age=86400',
+                'X-Screenshot-Cached': 'true',
+                'X-Screenshot-Captured': fallback.metadata.captured_at,
+                'X-Screenshot-Date': nearest,
+              },
+            });
+          }
+        }
+        return new Response(
+          `No screenshot found for ${normalizedUrl} on or before ${parsed.date}. No earlier screenshots are available for this URL.`,
+          { status: 404 }
+        );
+      }
 
       // Check rate limit for refresh
       if (hasRefresh) {
