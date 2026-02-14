@@ -506,8 +506,8 @@ export function renderHomepage(): string {
       </div>
 
       <div class="hero-screenshot" id="hero-screenshot">
-        <a href="https://screenshotit.app/linear.app" target="_blank" rel="noopener">
-          <img src="/linear.app" alt="Screenshot of linear.app">
+        <a href="#" target="_blank" rel="noopener">
+          <img src="" alt="">
         </a>
       </div>
     </div>
@@ -649,27 +649,57 @@ export function renderHomepage(): string {
   </div>
 
   <script>
-    // Typing animation
-    const text = 'screenshotit.app/linear.app';
+    // Typing animation - rotating demos
+    const demos = [
+      'linear.app',
+      'news.ycombinator.com',
+      'github.com/flowershow/screenshotit',
+    ];
+    const prefix = 'screenshotit.app/';
     const typedEl = document.querySelector('.typed-text');
     const screenshotEl = document.getElementById('hero-screenshot');
-    let i = 0;
+    const screenshotLink = screenshotEl.querySelector('a');
+    const screenshotImg = screenshotEl.querySelector('img');
 
-    function type() {
-      if (i < text.length) {
-        typedEl.textContent += text.charAt(i);
-        i++;
-        setTimeout(type, 50);
-      } else {
-        // Show screenshot after typing completes
-        setTimeout(() => {
-          screenshotEl.classList.add('visible');
-        }, 300);
-      }
+    // Preload images so they appear instantly
+    demos.forEach(url => { const img = new Image(); img.src = '/' + url; });
+
+    function typeText(text, onDone) {
+      let i = 0;
+      (function tick() {
+        if (i < text.length) {
+          typedEl.textContent += text.charAt(i);
+          i++;
+          setTimeout(tick, 50);
+        } else {
+          onDone();
+        }
+      })();
     }
 
-    // Start typing after a brief delay
-    setTimeout(type, 500);
+    function showDemo(index) {
+      const url = demos[index];
+      screenshotLink.href = 'https://screenshotit.app/' + url;
+      screenshotImg.src = '/' + url;
+      screenshotImg.alt = 'Screenshot of ' + url;
+
+      typeText(prefix + url, () => {
+        setTimeout(() => {
+          screenshotEl.classList.add('visible');
+
+          setTimeout(() => {
+            screenshotEl.classList.remove('visible');
+            setTimeout(() => {
+              typedEl.textContent = '';
+              showDemo((index + 1) % demos.length);
+            }, 500);
+          }, 2000);
+        }, 300);
+      });
+    }
+
+    // Start after a brief delay
+    setTimeout(() => showDemo(0), 500);
 
     // Tab switching
     document.querySelectorAll('.embed-tab').forEach(tab => {
