@@ -60,8 +60,8 @@ export async function captureScreenshot(
       timeout: 30000,
     });
 
-    // Small delay for fonts/animations to settle
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // Delay for fonts/animations to settle
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Take screenshot
     const screenshot = await page.screenshot({
