@@ -114,14 +114,14 @@ export function renderHomepage(): string {
     }
 
     .hero-screenshot {
-      opacity: 0;
-      transform: translateY(8px);
+      opacity: 1;
+      transform: translateY(0);
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
-    .hero-screenshot.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .hero-screenshot.hidden {
+      opacity: 0;
+      transform: translateY(8px);
     }
 
     .hero-screenshot a {
@@ -502,12 +502,12 @@ export function renderHomepage(): string {
 
     <div class="hero">
       <div class="hero-typing">
-        <span class="typed-text"></span><span class="cursor"></span>
+        <span class="typed-text">screenshotit.app/linear.app</span><span class="cursor"></span>
       </div>
 
       <div class="hero-screenshot" id="hero-screenshot">
-        <a href="#" target="_blank" rel="noopener">
-          <img src="" alt="">
+        <a href="https://screenshotit.app/linear.app" target="_blank" rel="noopener">
+          <img src="/linear.app" alt="Screenshot of linear.app">
         </a>
       </div>
     </div>
@@ -685,10 +685,10 @@ export function renderHomepage(): string {
 
       typeText(prefix + url, () => {
         setTimeout(() => {
-          screenshotEl.classList.add('visible');
+          screenshotEl.classList.remove('hidden');
 
           setTimeout(() => {
-            screenshotEl.classList.remove('visible');
+            screenshotEl.classList.add('hidden');
             setTimeout(() => {
               typedEl.textContent = '';
               showDemo((index + 1) % demos.length);
@@ -698,8 +698,14 @@ export function renderHomepage(): string {
       });
     }
 
-    // Start after a brief delay
-    setTimeout(() => showDemo(0), 500);
+    // Show first demo immediately, start rotating after 2s
+    setTimeout(() => {
+      screenshotEl.classList.add('hidden');
+      setTimeout(() => {
+        typedEl.textContent = '';
+        showDemo(1);
+      }, 500);
+    }, 2000);
 
     // Tab switching
     document.querySelectorAll('.embed-tab').forEach(tab => {
