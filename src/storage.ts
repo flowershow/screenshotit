@@ -38,7 +38,7 @@ export async function saveScreenshot(
       modifiers: metadata.modifiers,
     } as Record<string, string>,
     httpMetadata: {
-      contentType: 'image/png',
+      contentType: 'image/webp',
     },
   };
 
@@ -47,7 +47,7 @@ export async function saveScreenshot(
 
   // Save to dated version
   const today = metadata.captured_at.split('T')[0];
-  const datedKey = latestKey.replace('latest.png', `${today}.png`);
+  const datedKey = latestKey.replace('latest.webp', `${today}.webp`);
   await bucket.put(datedKey, imageData, options);
 }
 
@@ -61,7 +61,7 @@ export async function findNearestDate(
 
   for (const object of listed.objects) {
     const filename = object.key.split('/').pop() || '';
-    const match = filename.match(/^(\d{4}-\d{2}-\d{2})\.png$/);
+    const match = filename.match(/^(\d{4}-\d{2}-\d{2})\.webp$/);
     if (!match) continue;
     const date = match[1];
     if (date < beforeDate && (!nearest || date > nearest)) {

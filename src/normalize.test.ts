@@ -117,43 +117,43 @@ describe('normalizeUrl', () => {
 describe('buildR2Key', () => {
   it('builds key for default modifiers', () => {
     expect(buildR2Key('https://example.com', [])).toBe(
-      'screenshots/https://example.com/default/latest.png'
+      'screenshots/https://example.com/default/latest.webp'
     );
   });
 
   it('builds key with single modifier', () => {
     expect(buildR2Key('https://example.com', ['full'])).toBe(
-      'screenshots/https://example.com/full/latest.png'
+      'screenshots/https://example.com/full/latest.webp'
     );
   });
 
   it('builds key with multiple modifiers sorted', () => {
     expect(buildR2Key('https://example.com', ['mobile', 'full'])).toBe(
-      'screenshots/https://example.com/full-mobile/latest.png'
+      'screenshots/https://example.com/full-mobile/latest.webp'
     );
   });
 
   it('excludes refresh from key', () => {
     expect(buildR2Key('https://example.com', ['refresh', 'full'])).toBe(
-      'screenshots/https://example.com/full/latest.png'
+      'screenshots/https://example.com/full/latest.webp'
     );
   });
 
   it('builds dated key', () => {
     expect(buildR2Key('https://example.com', [], '2026-01-28')).toBe(
-      'screenshots/https://example.com/default/2026-01-28.png'
+      'screenshots/https://example.com/default/2026-01-28.webp'
     );
   });
 
   it('includes social in key', () => {
     expect(buildR2Key('https://example.com', ['social'])).toBe(
-      'screenshots/https://example.com/social/latest.png'
+      'screenshots/https://example.com/social/latest.webp'
     );
   });
 
   it('handles URL with path', () => {
     expect(buildR2Key('https://example.com/some/page', [])).toBe(
-      'screenshots/https://example.com/some/page/default/latest.png'
+      'screenshots/https://example.com/some/page/default/latest.webp'
     );
   });
 });

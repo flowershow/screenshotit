@@ -22,7 +22,7 @@ describe('storage', () => {
       mockBucket.get.mockResolvedValue(null);
       const result = await getScreenshot(
         mockBucket as unknown as R2Bucket,
-        'screenshots/example/default/latest.png'
+        'screenshots/example/default/latest.webp'
       );
       expect(result).toBeNull();
     });
@@ -41,12 +41,12 @@ describe('storage', () => {
 
       const result = await getScreenshot(
         mockBucket as unknown as R2Bucket,
-        'screenshots/example/default/latest.png'
+        'screenshots/example/default/latest.webp'
       );
 
       expect(result).not.toBeNull();
       expect(mockBucket.get).toHaveBeenCalledWith(
-        'screenshots/example/default/latest.png'
+        'screenshots/example/default/latest.webp'
       );
     });
   });
@@ -63,19 +63,19 @@ describe('storage', () => {
 
       await saveScreenshot(
         mockBucket as unknown as R2Bucket,
-        'screenshots/https://example.com/default/latest.png',
+        'screenshots/https://example.com/default/latest.webp',
         imageData,
         metadata
       );
 
       expect(mockBucket.put).toHaveBeenCalledTimes(2);
       expect(mockBucket.put).toHaveBeenCalledWith(
-        'screenshots/https://example.com/default/latest.png',
+        'screenshots/https://example.com/default/latest.webp',
         imageData,
         expect.objectContaining({ customMetadata: metadata })
       );
       expect(mockBucket.put).toHaveBeenCalledWith(
-        expect.stringContaining('screenshots/https://example.com/default/2026-01-28.png'),
+        expect.stringContaining('screenshots/https://example.com/default/2026-01-28.webp'),
         imageData,
         expect.objectContaining({ customMetadata: metadata })
       );
@@ -86,10 +86,10 @@ describe('storage', () => {
     it('returns nearest date before requested date', async () => {
       mockBucket.list.mockResolvedValue({
         objects: [
-          { key: 'screenshots/https://example.com/default/2026-01-20.png' },
-          { key: 'screenshots/https://example.com/default/2026-01-25.png' },
-          { key: 'screenshots/https://example.com/default/2026-01-30.png' },
-          { key: 'screenshots/https://example.com/default/latest.png' },
+          { key: 'screenshots/https://example.com/default/2026-01-20.webp' },
+          { key: 'screenshots/https://example.com/default/2026-01-25.webp' },
+          { key: 'screenshots/https://example.com/default/2026-01-30.webp' },
+          { key: 'screenshots/https://example.com/default/latest.webp' },
         ],
       });
 
@@ -104,8 +104,8 @@ describe('storage', () => {
     it('returns null when no earlier screenshots exist', async () => {
       mockBucket.list.mockResolvedValue({
         objects: [
-          { key: 'screenshots/https://example.com/default/2026-02-01.png' },
-          { key: 'screenshots/https://example.com/default/latest.png' },
+          { key: 'screenshots/https://example.com/default/2026-02-01.webp' },
+          { key: 'screenshots/https://example.com/default/latest.webp' },
         ],
       });
 
@@ -128,11 +128,11 @@ describe('storage', () => {
       expect(result).toBeNull();
     });
 
-    it('skips latest.png and non-date files', async () => {
+    it('skips latest.webp and non-date files', async () => {
       mockBucket.list.mockResolvedValue({
         objects: [
-          { key: 'screenshots/https://example.com/default/latest.png' },
-          { key: 'screenshots/https://example.com/default/2026-01-15.png' },
+          { key: 'screenshots/https://example.com/default/latest.webp' },
+          { key: 'screenshots/https://example.com/default/2026-01-15.webp' },
         ],
       });
 

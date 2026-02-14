@@ -36,7 +36,7 @@ export default {
         if (cached) {
           return new Response(cached.data, {
             headers: {
-              'Content-Type': 'image/png',
+              'Content-Type': 'image/webp',
               'Cache-Control': 'public, max-age=86400',
               'X-Screenshot-Cached': 'true',
               'X-Screenshot-Captured': cached.metadata.captured_at,
@@ -52,7 +52,7 @@ export default {
           if (fallback) {
             return new Response(fallback.data, {
               headers: {
-                'Content-Type': 'image/png',
+                'Content-Type': 'image/webp',
                 'Cache-Control': 'public, max-age=86400',
                 'X-Screenshot-Cached': 'true',
                 'X-Screenshot-Captured': fallback.metadata.captured_at,
@@ -87,7 +87,7 @@ export default {
         if (cached) {
           return new Response(cached.data, {
             headers: {
-              'Content-Type': 'image/png',
+              'Content-Type': 'image/webp',
               'Cache-Control': 'public, max-age=86400',
               'X-Screenshot-Cached': 'true',
               'X-Screenshot-Captured': cached.metadata.captured_at,
@@ -121,7 +121,7 @@ export default {
       // Return image
       return new Response(imageData, {
         headers: {
-          'Content-Type': 'image/png',
+          'Content-Type': 'image/webp',
           'Cache-Control': 'public, max-age=86400',
           'X-Screenshot-Cached': 'false',
           'X-Screenshot-Captured': metadata.captured_at,

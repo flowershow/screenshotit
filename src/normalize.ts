@@ -84,7 +84,7 @@ export function buildR2Key(
       ? storageModifiers.sort().join('-')
       : 'default';
 
-  const filename = date ? `${date}.png` : 'latest.png';
+  const filename = date ? `${date}.webp` : 'latest.webp';
 
   return `screenshots/${normalizedUrl}/${modifierPart}/${filename}`;
 }

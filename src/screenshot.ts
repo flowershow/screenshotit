@@ -65,7 +65,7 @@ export async function captureScreenshot(
 
     // Take screenshot
     const screenshot = await page.screenshot({
-      type: 'png',
+      type: 'webp',
       fullPage: options.viewport.fullPage,
     });
 
