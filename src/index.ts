@@ -1,22 +1,30 @@
 // src/index.ts
-import { parseRequest, normalizeUrl, buildR2Key, Modifier } from './normalize';
+import { parseRequest, normalizeUrl, buildR2Key } from './normalize';
 import { getScreenshot, saveScreenshot, findNearestDate, ScreenshotMetadata } from './storage';
 import { getViewportConfig, captureScreenshot } from './screenshot';
 import { checkRefreshRateLimit, recordRefresh } from './ratelimit';
 import { renderHomepage } from './homepage';
+import {
+  getRecentCreatedScreenshots,
+  getTopScreenshots,
+  recordScreenshotAccess,
+  recordScreenshotCreated,
+} from './analytics';
 
 export interface Env {
   SCREENSHOTS: R2Bucket;
   BROWSER: Fetcher;
+  ANALYTICS_DB: D1Database;
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     // Handle root path
     if (url.pathname === '/' || url.pathname === '') {
-      return new Response(renderHomepage(), {
+      const homepageData = await loadHomepageData(env);
+      return new Response(renderHomepage(homepageData), {
         status: 200,
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
@@ -28,12 +36,26 @@ export default {
       const normalizedUrl = normalizeUrl(parsed.targetUrl);
       const r2Key = buildR2Key(normalizedUrl, parsed.modifiers, parsed.date);
       const hasRefresh = parsed.modifiers.includes('refresh');
+      const storageModifiers = parsed.modifiers.filter((m) => m !== 'refresh');
+      const modifiersString = storageModifiers.join(',');
+      const rateLimitModifiers = parsed.modifiers.filter(
+        (m): m is 'full' | 'mobile' | 'refresh' => m !== 'social'
+      );
 
       // Dated requests are read-only lookups
       if (parsed.date) {
         // Try exact date first
         const cached = await getScreenshot(env.SCREENSHOTS, r2Key);
         if (cached) {
+          queueAnalytics(
+            ctx,
+            recordScreenshotAccess(env.ANALYTICS_DB, {
+              r2Key: buildR2Key(normalizedUrl, parsed.modifiers),
+              targetUrl: normalizedUrl,
+              modifiers: modifiersString,
+              accessedAt: new Date().toISOString(),
+            })
+          );
           return new Response(cached.data, {
             headers: {
               'Content-Type': 'image/webp',
@@ -50,6 +72,15 @@ export default {
           const nearestKey = buildR2Key(normalizedUrl, parsed.modifiers, nearest);
           const fallback = await getScreenshot(env.SCREENSHOTS, nearestKey);
           if (fallback) {
+            queueAnalytics(
+              ctx,
+              recordScreenshotAccess(env.ANALYTICS_DB, {
+                r2Key: buildR2Key(normalizedUrl, parsed.modifiers),
+                targetUrl: normalizedUrl,
+                modifiers: modifiersString,
+                accessedAt: new Date().toISOString(),
+              })
+            );
             return new Response(fallback.data, {
               headers: {
                 'Content-Type': 'image/webp',
@@ -72,7 +103,7 @@ export default {
         const allowed = await checkRefreshRateLimit(
           env.SCREENSHOTS,
           normalizedUrl,
-          parsed.modifiers
+          rateLimitModifiers
         );
         if (!allowed) {
           return new Response('Refresh limit: once per day per URL', {
@@ -85,6 +116,15 @@ export default {
       if (!hasRefresh) {
         const cached = await getScreenshot(env.SCREENSHOTS, r2Key);
         if (cached) {
+          queueAnalytics(
+            ctx,
+            recordScreenshotAccess(env.ANALYTICS_DB, {
+              r2Key,
+              targetUrl: normalizedUrl,
+              modifiers: modifiersString,
+              accessedAt: new Date().toISOString(),
+            })
+          );
           return new Response(cached.data, {
             headers: {
               'Content-Type': 'image/webp',
@@ -112,10 +152,28 @@ export default {
 
       // Save to R2
       await saveScreenshot(env.SCREENSHOTS, r2Key, imageData, metadata);
+      queueAnalytics(
+        ctx,
+        recordScreenshotCreated(env.ANALYTICS_DB, {
+          r2Key,
+          targetUrl: normalizedUrl,
+          modifiers: modifiersString,
+          createdAt: metadata.captured_at,
+        })
+      );
+      queueAnalytics(
+        ctx,
+        recordScreenshotAccess(env.ANALYTICS_DB, {
+          r2Key,
+          targetUrl: normalizedUrl,
+          modifiers: modifiersString,
+          accessedAt: metadata.captured_at,
+        })
+      );
 
       // Record refresh for rate limiting
       if (hasRefresh) {
-        await recordRefresh(env.SCREENSHOTS, normalizedUrl, parsed.modifiers);
+        await recordRefresh(env.SCREENSHOTS, normalizedUrl, rateLimitModifiers);
       }
 
       // Return image
@@ -145,3 +203,28 @@ export default {
     }
   },
 };
+
+async function loadHomepageData(env: Env) {
+  try {
+    const [topScreenshots, recentScreenshots] = await Promise.all([
+      getTopScreenshots(env.ANALYTICS_DB, 10),
+      getRecentCreatedScreenshots(env.ANALYTICS_DB, 10),
+    ]);
+    return { topScreenshots, recentScreenshots };
+  } catch (error) {
+    console.error('Failed to load homepage analytics data', error);
+    return { topScreenshots: [], recentScreenshots: [] };
+  }
+}
+
+function queueAnalytics(ctx: ExecutionContext, operation: Promise<void>): void {
+  ctx.waitUntil(
+    (async () => {
+      try {
+        await operation;
+      } catch (error) {
+        console.error('Failed to write analytics event', error);
+      }
+    })()
+  );
+}

@@ -85,6 +85,18 @@ Note: Browser Rendering API doesn't work in local mode. Use `wrangler dev --remo
 npm test
 ```
 
+## Analytics
+
+Screenshot analytics are tracked server-side in Cloudflare D1:
+
+- `access_count` increments on every successful screenshot response (cached or fresh)
+- `created_count` increments on every newly captured screenshot
+- Homepage uses this data for:
+  - most accessed screenshots leaderboard
+  - recently created screenshots list
+
+Tracking starts from the point this feature is deployed. No backfill is performed by default.
+
 ## Deployment
 
 ### One-time Setup
@@ -102,6 +114,18 @@ npm test
 3. **Enable Browser Rendering API:**
    - Go to Cloudflare Dashboard → Workers & Pages → your account
    - Browser Rendering requires a paid Workers plan ($5/month)
+
+4. **Create D1 database for analytics:**
+   ```bash
+   npx wrangler d1 create screenshotit-analytics
+   ```
+   Copy the `database_id` from output and set it in `wrangler.toml` under `[[d1_databases]]`.
+
+5. **Apply D1 migrations:**
+   ```bash
+   npx wrangler d1 migrations apply ANALYTICS_DB --local
+   npx wrangler d1 migrations apply ANALYTICS_DB --remote
+   ```
 
 ### Deploy
 
@@ -140,4 +164,4 @@ Built on Cloudflare's edge infrastructure:
 - **Worker** - Request handling, URL parsing, caching logic
 - **Browser Rendering API** - Headless Chromium for screenshots
 - **R2** - Object storage for cached screenshots
-
+- **D1** - Analytics counters for accesses and creations

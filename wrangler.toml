@@ -16,6 +16,12 @@ preview_bucket_name = "screenshotit-dev"
 [browser]
 binding = "BROWSER"
 
+[[d1_databases]]
+binding = "screenshotit_analytics"
+database_name = "screenshotit-analytics"
+database_id = "ceffb5a4-6f72-43c0-8825-33be21f83609"
+migrations_dir = "migrations"
+
 [dev]
 port = 8787
 local_protocol = "http"

@@ -1,10 +1,21 @@
 // src/homepage.ts
+import { ScreenshotStatsRow, toPublicScreenshotPath } from './analytics';
+
+export interface HomepageAnalyticsData {
+  topScreenshots: ScreenshotStatsRow[];
+  recentScreenshots: ScreenshotStatsRow[];
+}
 
 /**
  * Renders the homepage HTML.
  * Clean, elegant design with monospace typography and animated hero.
  */
-export function renderHomepage(): string {
+export function renderHomepage(data?: HomepageAnalyticsData): string {
+  const topScreenshots = data?.topScreenshots || [];
+  const recentScreenshots = data?.recentScreenshots || [];
+  const leaderboardItems = renderAnalyticsList(topScreenshots, 'No screenshot access data yet.');
+  const recentItems = renderAnalyticsList(recentScreenshots, 'No screenshots created yet.');
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -618,6 +629,20 @@ export function renderHomepage(): string {
       <p class="embed-note">Produces a 1200×630 viewport at 2x (2400×1260 output). Retina-sharp on every platform.</p>
     </div>
 
+    <div class="section">
+      <div class="section-title"><span class="hash">##</span>Most accessed screenshots</div>
+      <div class="api-examples">
+        ${leaderboardItems}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="hash">##</span>Recently created screenshots</div>
+      <div class="api-examples">
+        ${recentItems}
+      </div>
+    </div>
+
     <hr>
 
     <div class="footer">
@@ -733,4 +758,31 @@ export function renderHomepage(): string {
   <script defer src="https://cloud.umami.is/script.js" data-website-id="9b2be64e-20be-426f-a213-1e6ef1260d05"></script>
 </body>
 </html>`;
+}
+
+function renderAnalyticsList(rows: ScreenshotStatsRow[], emptyMessage: string): string {
+  if (rows.length === 0) {
+    return `<div class="api-example"><span class="desc">${escapeHtml(emptyMessage)}</span></div>`;
+  }
+
+  return rows
+    .map((row) => {
+      const path = toPublicScreenshotPath(row.targetUrl, row.modifiers);
+      const label = `screenshotit.app${path}`;
+      return `<div class="api-example">
+          <a href="${escapeHtml(path)}">${escapeHtml(label)}</a>
+          <span class="arrow">→</span>
+          <span class="desc">${row.accessCount} views • ${row.createdCount} captures</span>
+        </div>`;
+    })
+    .join('');
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
 }
