@@ -2,6 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { renderHomepage } from './homepage';
 
 describe('renderHomepage analytics sections', () => {
+  it('renders clear hero usage examples', () => {
+    const html = renderHomepage();
+
+    expect(html).toContain('From URL to screenshot in one line');
+    expect(html).toContain('screenshotit.app/example.com');
+    expect(html).toContain('![](https://screenshotit.app/example.com)');
+  });
+
   it('renders leaderboard and recent sections when rows are provided', () => {
     const html = renderHomepage({
       topScreenshots: [
