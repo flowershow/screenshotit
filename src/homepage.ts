@@ -111,50 +111,25 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
     }
 
     .hero-copy {
-      border: 1px solid #e0e0e0;
-      background: #fff;
-      padding: 20px;
+      padding-top: 2px;
     }
 
     .hero-copy h1 {
-      font-size: 22px;
-      line-height: 1.25;
-      font-weight: 500;
-      margin-bottom: 10px;
+      font-size: 18px;
+      line-height: 1.6;
+      font-weight: 400;
+      margin-bottom: 12px;
       color: #111;
     }
 
     .hero-copy p {
       font-size: 14px;
       color: #444;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
-    .hero-example {
-      display: grid;
-      grid-template-columns: 84px 1fr;
-      gap: 10px;
-      align-items: start;
-      margin-top: 10px;
-    }
-
-    .hero-example .label {
-      font-size: 12px;
-      color: #777;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      padding-top: 8px;
-    }
-
-    .hero-example code {
-      display: block;
-      background: #f5f5f5;
-      border: 1px solid #e0e0e0;
-      padding: 8px 10px;
-      color: #111;
-      font-size: 13px;
-      overflow-x: auto;
-      white-space: nowrap;
+    .hero-copy .api-pattern {
+      margin-bottom: 0;
     }
 
     .hero-visual {
@@ -542,16 +517,7 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
       }
 
       .hero-copy h1 {
-        font-size: 20px;
-      }
-
-      .hero-example {
-        grid-template-columns: 1fr;
-        gap: 6px;
-      }
-
-      .hero-example .label {
-        padding-top: 0;
+        font-size: 16px;
       }
 
       .hero-typing {
@@ -590,15 +556,10 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
     <div class="hero">
       <div class="hero-grid">
         <div class="hero-copy">
-          <h1>From URL to screenshot in one line</h1>
-          <p>Paste any URL after screenshotit.app and you get a stable image you can embed anywhere.</p>
-          <div class="hero-example">
-            <div class="label">Input</div>
-            <code>screenshotit.app/example.com</code>
-          </div>
-          <div class="hero-example">
-            <div class="label">Markdown</div>
-            <code>![](https://screenshotit.app/example.com)</code>
+          <h1>URL to Screenshot in one line</h1>
+          <p>Paste any URL after screenshotit.app and get a stable image you can embed anywhere.</p>
+          <div class="api-pattern">
+            <code>screenshotit.app/<strong>{url}</strong></code>
           </div>
         </div>
 

@@ -5,9 +5,11 @@ describe('renderHomepage analytics sections', () => {
   it('renders clear hero usage examples', () => {
     const html = renderHomepage();
 
-    expect(html).toContain('From URL to screenshot in one line');
-    expect(html).toContain('screenshotit.app/example.com');
-    expect(html).toContain('![](https://screenshotit.app/example.com)');
+    expect(html).toContain('URL to Screenshot in one line');
+    expect(html).toContain(
+      'Paste any URL after screenshotit.app and get a stable image you can embed anywhere.'
+    );
+    expect(html).toContain('screenshotit.app/<strong>{url}</strong>');
   });
 
   it('renders leaderboard and recent sections when rows are provided', () => {
