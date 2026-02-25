@@ -63,77 +63,59 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
       padding: 48px 24px;
     }
 
-    .site-header {
-      margin-bottom: 48px;
+    /* Hero */
+    .hero {
+      margin-bottom: 64px;
+      text-align: center;
     }
 
-    .site-name {
-      font-size: 18px;
-      font-weight: 500;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+    .hero-brand {
+      font-size: 16px;
+      margin-bottom: 14px;
       color: #111;
-      margin-bottom: 8px;
     }
 
-    .site-name .credit {
-      font-size: 14px;
-      font-weight: 400;
-      letter-spacing: 0;
-      text-transform: none;
+    .hero-brand .credit {
       color: #888;
+      font-size: 14px;
     }
 
-    .site-name .credit a {
+    .hero-brand .credit a {
       color: #888;
       text-decoration: none;
     }
 
-    .site-name .credit a:hover {
+    .hero-brand .credit a:hover {
       text-decoration: underline;
     }
 
-    .site-tagline {
-      font-size: 14px;
+    .hero-title {
+      font-size: 36px;
+      line-height: 1.2;
+      font-weight: 500;
+      margin-bottom: 16px;
       color: #111;
     }
 
-    /* Hero */
-    .hero {
-      margin-bottom: 64px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(320px, 1fr) minmax(360px, 1fr);
-      gap: 28px;
-      align-items: start;
-    }
-
-    .hero-copy {
-      padding-top: 2px;
-    }
-
-    .hero-copy h1 {
-      font-size: 18px;
-      line-height: 1.6;
-      font-weight: 400;
-      margin-bottom: 12px;
-      color: #111;
-    }
-
-    .hero-copy p {
+    .hero-subtitle {
+      max-width: 760px;
+      margin: 0 auto 18px auto;
       font-size: 14px;
       color: #444;
-      margin-bottom: 16px;
+      line-height: 1.7;
     }
 
-    .hero-copy .api-pattern {
-      margin-bottom: 0;
+    .hero-example-line {
+      font-size: 18px;
+      color: #111;
+      margin-bottom: 28px;
+      font-weight: 500;
     }
 
     .hero-visual {
       min-width: 0;
+      max-width: 760px;
+      margin: 0 auto;
     }
 
     .hero-typing {
@@ -511,12 +493,11 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
         padding: 32px 20px;
       }
 
-      .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+      .hero-title {
+        font-size: 28px;
       }
 
-      .hero-copy h1 {
+      .hero-example-line {
         font-size: 16px;
       }
 
@@ -548,31 +529,21 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
 </head>
 <body>
   <div class="container">
-    <div class="site-header">
-      <div class="site-name">Screenshot•It <span class="credit">by <a href="https://datopian.com/">Datopian Data Co</a></span></div>
-      <div class="site-tagline">The URL is the screenshot.</div>
-    </div>
-
     <div class="hero">
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <h1>URL to Screenshot in one line</h1>
-          <p>Paste any URL after screenshotit.app and get a stable image you can embed anywhere.</p>
-          <div class="api-pattern">
-            <code>screenshotit.app/<strong>{url}</strong></code>
-          </div>
+      <div class="hero-brand">Screenshot•It <span class="credit">by <a href="https://datopian.com/">Datopian Data Co</a></span></div>
+      <h1 class="hero-title">URL to Screenshot in one line</h1>
+      <p class="hero-subtitle">Paste any URL after screenshotit.app and get a stable image you can embed anywhere.</p>
+      <div class="hero-example-line">screenshotit.app/{url}</div>
+
+      <div class="hero-visual">
+        <div class="hero-typing">
+          <span class="typed-text">screenshotit.app/linear.app</span><span class="cursor"></span>
         </div>
 
-        <div class="hero-visual">
-          <div class="hero-typing">
-            <span class="typed-text">screenshotit.app/linear.app</span><span class="cursor"></span>
-          </div>
-
-          <div class="hero-screenshot" id="hero-screenshot">
-            <a href="https://screenshotit.app/linear.app" target="_blank" rel="noopener">
-              <img src="/linear.app" alt="Screenshot of linear.app">
-            </a>
-          </div>
+        <div class="hero-screenshot" id="hero-screenshot">
+          <a href="https://screenshotit.app/linear.app" target="_blank" rel="noopener">
+            <img src="/linear.app" alt="Screenshot of linear.app">
+          </a>
         </div>
       </div>
     </div>

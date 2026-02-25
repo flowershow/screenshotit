@@ -5,11 +5,13 @@ describe('renderHomepage analytics sections', () => {
   it('renders clear hero usage examples', () => {
     const html = renderHomepage();
 
+    expect(html).toContain('Screenshot•It <span class="credit">by <a href="https://datopian.com/">Datopian Data Co</a></span>');
     expect(html).toContain('URL to Screenshot in one line');
     expect(html).toContain(
       'Paste any URL after screenshotit.app and get a stable image you can embed anywhere.'
     );
-    expect(html).toContain('screenshotit.app/<strong>{url}</strong>');
+    expect(html).toContain('screenshotit.app/{url}');
+    expect(html).not.toContain('<div class="site-tagline">The URL is the screenshot.</div>');
   });
 
   it('renders leaderboard and recent sections when rows are provided', () => {
