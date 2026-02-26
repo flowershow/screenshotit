@@ -179,6 +179,18 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
       margin-right: 6px;
     }
 
+    .major-section-title {
+      font-size: 26px;
+      font-weight: 500;
+      margin: 10px 0 24px 0;
+      color: #111;
+    }
+
+    .major-section-title .hash {
+      color: #999;
+      margin-right: 8px;
+    }
+
     .section-desc {
       font-size: 14px;
       color: #666;
@@ -549,7 +561,7 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
     </div>
 
     <div class="section">
-      <div class="section-title"><span class="hash">##</span>API</div>
+      <h2 class="section-title"><span class="hash">##</span>API</h2>
       <div class="api-pattern">
         <code>screenshotit.app/<strong>{url}</strong></code>
       </div>
@@ -595,7 +607,7 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
     </div>
 
     <div class="section">
-      <div class="section-title"><span class="hash">##</span>Embed anywhere</div>
+      <h2 class="section-title"><span class="hash">##</span>Embed anywhere</h2>
       <p class="section-desc">No need to use an app or take a screenshot. Just use the URL.</p>
 
       <div class="embed-tabs">
@@ -617,7 +629,7 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
     </div>
 
     <div class="section social-section">
-      <div class="section-title"><span class="hash">##</span>Social previews</div>
+      <h2 class="section-title"><span class="hash">##</span>Social previews</h2>
       <p class="section-desc">Use <code>@social</code> to generate Open Graph images — perfect for link previews on Twitter/X, Facebook, LinkedIn, Discord, Slack, and iMessage.</p>
 
       <div class="social-demo">
@@ -654,15 +666,17 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
       <p class="embed-note">Produces a 1200×630 viewport at 2x (2400×1260 output). Retina-sharp on every platform.</p>
     </div>
 
+    <h1 id="leaderboard" class="major-section-title"><span class="hash">#</span>Leaderboard</h1>
+
     <div class="section">
-      <div class="section-title"><span class="hash">##</span>Most accessed screenshots</div>
+      <h2 class="section-title"><span class="hash">##</span>Most accessed screenshots</h2>
       <div class="api-examples">
         ${leaderboardItems}
       </div>
     </div>
 
     <div class="section">
-      <div class="section-title"><span class="hash">##</span>Recently created screenshots</div>
+      <h2 class="section-title"><span class="hash">##</span>Recently created screenshots</h2>
       <div class="api-examples">
         ${recentItems}
       </div>
