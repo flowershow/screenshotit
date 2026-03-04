@@ -558,6 +558,10 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
           </a>
         </div>
       </div>
+
+      <div class="hero-video" style="max-width: 760px; margin: 64px auto 0; border-radius: 12px; overflow: hidden; border: 1px solid #ddd; aspect-ratio: 16/9; background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/gjs1q5YgZjc" title="ScreenshotIt Demo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="display: block;"></iframe>
+      </div>
     </div>
 
     <div class="section">
