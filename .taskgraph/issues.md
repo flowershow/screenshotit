@@ -1,0 +1,1 @@
+- [ ] ➕2026-03-12 [scre-6yd] get rid of cookie popups in screenshots - see eg. https://stackoverflow.com/questions/59618456/pupeteer-how-can-i-accept-cookie-consent-prompts-automatically-for-any-url - see https://screenshotit.app/hel.fi/en as a problem
