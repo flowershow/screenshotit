@@ -62,6 +62,7 @@ export async function upsertAccountScreenshot(
       input.modifiers,
       input.r2Prefix,
       input.byteSize,
+      input.capturedAt,
       input.capturedAt
     )
     .first<{ id: string }>();

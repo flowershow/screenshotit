@@ -48,6 +48,7 @@ describe('account screenshot catalog', () => {
       'accounts/account-1/screenshots/https://example.com/full/',
       1234,
       '2026-08-21T12:00:00.000Z',
+      '2026-08-21T12:00:00.000Z',
     ]);
   });
 
