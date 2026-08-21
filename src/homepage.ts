@@ -26,11 +26,11 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SCREENSHOT•IT by Datopian Data Co</title>
-  <meta name="description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard.">
+  <meta name="description" content="Screenshot any webpage via URL. No API keys or SDK. Optional GitHub accounts.">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Screenshot•It — The URL is the screenshot.">
-  <meta property="og:description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard. Just paste a link, get an image.">
+  <meta property="og:description" content="Screenshot any webpage via URL. No API keys or SDK. Optional GitHub accounts.">
   <meta property="og:image" content="https://screenshotit.app/screenshotit.app@social">
   <meta property="og:image:width" content="2400">
   <meta property="og:image:height" content="1260">
@@ -40,7 +40,7 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Screenshot•It — The URL is the screenshot.">
-  <meta name="twitter:description" content="Screenshot any webpage via URL. No API keys. No SDK. No dashboard.">
+  <meta name="twitter:description" content="Screenshot any webpage via URL. No API keys or SDK. Optional GitHub accounts.">
   <meta name="twitter:image" content="https://screenshotit.app/screenshotit.app@social">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">

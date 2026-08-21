@@ -49,7 +49,10 @@ describe('renderHomepage analytics sections', () => {
   });
 
   it('renders GitHub login for a logged-out visitor', () => {
-    expect(renderHomepage()).toContain('Log in with GitHub');
+    const html = renderHomepage();
+    expect(html).toContain('Log in with GitHub');
+    expect(html).toContain('Optional GitHub accounts');
+    expect(html).not.toContain('No dashboard');
   });
 
   it('renders the account namespace and dashboard link when logged in', () => {
