@@ -14,15 +14,19 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 ];
 
 export function renderChangelogPage(
-  entries: readonly ChangelogEntry[] = CHANGELOG_ENTRIES
+  entries: readonly ChangelogEntry[] = CHANGELOG_ENTRIES,
+  account?: { username: string } | null
 ): string {
+  const accountNavigation = account
+    ? `<a href="/dashboard">@${escapeHtml(account.username)}</a>`
+    : '<a href="/auth/github">Log in with GitHub</a>';
   const renderedEntries = entries
     .map(
       (entry) => `
-        <article class="entry">
-          <p class="date">${escapeHtml(entry.date)}</p>
-          <h2>${escapeHtml(entry.title)}</h2>
-          <p>${escapeHtml(entry.body)}</p>
+        <article class="section entry">
+          <p class="date section-desc">${escapeHtml(entry.date)}</p>
+          <h2 class="section-title"><span class="hash">##</span>${escapeHtml(entry.title)}</h2>
+          <p class="entry-body">${escapeHtml(entry.body)}</p>
         </article>`
     )
     .join('');
@@ -33,24 +37,30 @@ export function renderChangelogPage(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Changelog · Screenshot•It</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: dark; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-    body { margin: 0; background: #111; color: #f4f1ea; }
-    main { max-width: 760px; margin: 0 auto; padding: 28px 20px 72px; }
-    nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 72px; }
-    nav a { color: inherit; text-decoration: none; }
-    .back { color: #b9b2a7; font-size: 13px; }
-    h1 { font-size: clamp(32px, 7vw, 64px); line-height: 1; margin: 0 0 56px; letter-spacing: -0.06em; }
-    .entry { border-top: 1px solid #393631; padding: 28px 0 36px; }
-    .date { color: #a7a095; font-size: 13px; margin: 0 0 12px; }
-    h2 { font-size: 24px; line-height: 1.15; margin: 0 0 16px; letter-spacing: -0.04em; }
-    .entry > p:last-child { color: #d4cfc6; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 17px; line-height: 1.6; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'IBM Plex Mono', 'SF Mono', 'Menlo', 'Consolas', monospace; background: #fafafa; color: #111; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .container { max-width: 980px; margin: 0 auto; padding: 48px 24px; }
+    .account-nav { display: flex; justify-content: flex-end; margin-bottom: 24px; font-size: 13px; }
+    .account-nav a { color: #111; }
+    .brand-link { color: #111; text-decoration: none; }
+    .major-section-title { font-size: 26px; font-weight: 500; margin: 10px 0 40px; color: #111; }
+    .major-section-title .hash, .section-title .hash { color: #999; margin-right: 8px; }
+    .section { margin-bottom: 56px; }
+    .section-title { font-size: 15px; font-weight: 500; margin-bottom: 12px; color: #111; }
+    .section-desc { font-size: 14px; color: #666; margin-bottom: 8px; }
+    .entry { border-top: 1px solid #ddd; padding-top: 24px; }
+    .entry-body { max-width: 760px; font-size: 14px; color: #444; line-height: 1.7; }
   </style>
 </head>
 <body>
-  <main>
-    <nav><a href="/">Screenshot•It</a><a class="back" href="/">Back home</a></nav>
-    <h1>Changelog</h1>
+  <main class="container">
+    <div class="account-nav">${accountNavigation}</div>
+    <a class="brand-link" href="/">Screenshot•It</a>
+    <h1 class="major-section-title"><span class="hash">#</span>Changelog</h1>
     ${renderedEntries || '<p>No updates yet.</p>'}
   </main>
 </body>

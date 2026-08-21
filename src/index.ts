@@ -38,10 +38,14 @@ export default {
       }
 
       if (url.pathname === '/changelog') {
-        return new Response(renderChangelogPage(), {
+        const session = await sessionFromRequest(request, env).catch(() => null);
+        return new Response(
+          renderChangelogPage(undefined, session ? { username: session.username } : null),
+          {
           status: 200,
           headers: { 'Content-Type': 'text/html; charset=utf-8' },
-        });
+          }
+        );
       }
 
       return handleScreenshotRequest(request, env, ctx);

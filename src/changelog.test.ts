@@ -9,6 +9,9 @@ describe('changelog page', () => {
     expect(html).toContain('Account-owned screenshots');
     expect(html).toContain('2026-08-21');
     expect(html).toContain('href="/"');
+    expect(html).toContain("IBM Plex Mono");
+    expect(html).toContain('background: #fafafa');
+    expect(html).toContain('class="major-section-title"');
   });
 
   it('escapes entry content before rendering HTML', () => {
