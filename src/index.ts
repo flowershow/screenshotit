@@ -4,12 +4,14 @@ import {
   getTopScreenshots,
 } from './analytics';
 import { handleAuthRequest, type GithubAuthEnv } from './github-auth';
+import { sessionFromRequest } from './github-auth';
+import { handleDashboardRequest, type DashboardEnv } from './dashboard';
 import {
   handleScreenshotRequest,
   type ScreenshotHandlerEnv,
 } from './screenshot-handler';
 
-export interface Env extends GithubAuthEnv, ScreenshotHandlerEnv {}
+export interface Env extends GithubAuthEnv, ScreenshotHandlerEnv, DashboardEnv {}
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -19,12 +21,24 @@ export default {
       const authResponse = await handleAuthRequest(request, env);
       if (authResponse) return authResponse;
 
+      const dashboardResponse = await handleDashboardRequest(request, env);
+      if (dashboardResponse) return dashboardResponse;
+
       if (url.pathname === '/' || url.pathname === '') {
-        const homepageData = await loadHomepageData(env);
-        return new Response(renderHomepage(homepageData), {
+        const [homepageData, session] = await Promise.all([
+          loadHomepageData(env),
+          sessionFromRequest(request, env).catch(() => null),
+        ]);
+        return new Response(
+          renderHomepage({
+            ...homepageData,
+            account: session ? { username: session.username } : null,
+          }),
+          {
           status: 200,
           headers: { 'Content-Type': 'text/html; charset=utf-8' },
-        });
+          }
+        );
       }
 
       return handleScreenshotRequest(request, env, ctx);

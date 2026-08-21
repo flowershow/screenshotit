@@ -4,6 +4,7 @@ import { ScreenshotStatsRow, toPublicScreenshotPath } from './analytics';
 export interface HomepageAnalyticsData {
   topScreenshots: ScreenshotStatsRow[];
   recentScreenshots: ScreenshotStatsRow[];
+  account?: { username: string } | null;
 }
 
 /**
@@ -15,6 +16,9 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
   const recentScreenshots = data?.recentScreenshots || [];
   const leaderboardItems = renderAnalyticsList(topScreenshots, 'No screenshot access data yet.');
   const recentItems = renderAnalyticsList(recentScreenshots, 'No screenshots created yet.');
+  const accountNavigation = data?.account
+    ? `<a href="/dashboard">@${escapeHtml(data.account.username)}</a>`
+    : '<a href="/auth/github">Log in with GitHub</a>';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -62,6 +66,15 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
       margin: 0 auto;
       padding: 48px 24px;
     }
+
+    .account-nav {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 24px;
+      font-size: 13px;
+    }
+
+    .account-nav a { color: #111; }
 
     /* Hero */
     .hero {
@@ -541,6 +554,7 @@ export function renderHomepage(data?: HomepageAnalyticsData): string {
 </head>
 <body>
   <div class="container">
+    <div class="account-nav">${accountNavigation}</div>
     <div class="hero">
       <div class="hero-brand">Screenshot•It <span class="credit">by <a href="https://datopian.com/">Datopian Data Co</a></span></div>
       <h1 class="hero-title">URL to Screenshot in one line</h1>

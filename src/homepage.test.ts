@@ -47,4 +47,19 @@ describe('renderHomepage analytics sections', () => {
     expect(html).toContain('/example.com');
     expect(html).toContain('/example.com@full');
   });
+
+  it('renders GitHub login for a logged-out visitor', () => {
+    expect(renderHomepage()).toContain('Log in with GitHub');
+  });
+
+  it('renders the account namespace and dashboard link when logged in', () => {
+    const html = renderHomepage({
+      topScreenshots: [],
+      recentScreenshots: [],
+      account: { username: 'alice' },
+    });
+
+    expect(html).toContain('@alice');
+    expect(html).toContain('href="/dashboard"');
+  });
 });
