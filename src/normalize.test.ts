@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { parseRequest, normalizeUrl, buildR2Key } from './normalize';
+import {
+  parseRequest,
+  normalizeUrl,
+  buildR2Key,
+  buildAccountR2Key,
+} from './normalize';
 
 describe('parseRequest', () => {
   it('extracts URL from path', () => {
@@ -154,6 +159,22 @@ describe('buildR2Key', () => {
   it('handles URL with path', () => {
     expect(buildR2Key('https://example.com/some/page', [])).toBe(
       'screenshots/https://example.com/some/page/default/latest.webp'
+    );
+  });
+});
+
+describe('buildAccountR2Key', () => {
+  it('uses the immutable account id rather than the username', () => {
+    expect(buildAccountR2Key('account-123', 'https://example.com', ['full'])).toBe(
+      'accounts/account-123/screenshots/https://example.com/full/latest.webp'
+    );
+  });
+
+  it('supports dated account screenshots', () => {
+    expect(
+      buildAccountR2Key('account-123', 'https://example.com', [], '2026-08-21')
+    ).toBe(
+      'accounts/account-123/screenshots/https://example.com/default/2026-08-21.webp'
     );
   });
 });

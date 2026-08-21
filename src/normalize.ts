@@ -75,6 +75,29 @@ export function buildR2Key(
   modifiers: Modifier[],
   date?: string
 ): string {
+  return buildScreenshotKey('screenshots', normalizedUrl, modifiers, date);
+}
+
+export function buildAccountR2Key(
+  accountId: string,
+  normalizedUrl: string,
+  modifiers: Modifier[],
+  date?: string
+): string {
+  return buildScreenshotKey(
+    `accounts/${accountId}/screenshots`,
+    normalizedUrl,
+    modifiers,
+    date
+  );
+}
+
+function buildScreenshotKey(
+  prefix: string,
+  normalizedUrl: string,
+  modifiers: Modifier[],
+  date?: string
+): string {
   // Filter out refresh (it's not part of the storage key)
   const storageModifiers = modifiers.filter((m) => m !== 'refresh');
 
@@ -86,5 +109,5 @@ export function buildR2Key(
 
   const filename = date ? `${date}.webp` : 'latest.webp';
 
-  return `screenshots/${normalizedUrl}/${modifierPart}/${filename}`;
+  return `${prefix}/${normalizedUrl}/${modifierPart}/${filename}`;
 }
