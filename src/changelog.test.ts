@@ -12,6 +12,7 @@ describe('changelog page', () => {
     expect(html).toContain("IBM Plex Mono");
     expect(html).toContain('background: #fafafa');
     expect(html).toContain('class="major-section-title"');
+    expect(html).toContain('raw.githubusercontent.com/flowershow/screenshotit/main/changelog/images/2026-08-21-account-owned-screenshots.jpg');
   });
 
   it('escapes entry content before rendering HTML', () => {
