@@ -71,6 +71,10 @@ describe('account persistence', () => {
 
     expect(account.username).toBe('alice');
     expect(account.id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(account).toMatchObject({
+      maxScreenshots: 100,
+      maxStorageBytes: 104857600,
+    });
     expect(db.batch).toHaveBeenCalledOnce();
     expect((db.batch.mock.calls[0][0] as unknown[])).toHaveLength(3);
   });

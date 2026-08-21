@@ -5,6 +5,8 @@ export interface Account {
   id: string;
   username: string;
   status: string;
+  maxScreenshots: number;
+  maxStorageBytes: number;
 }
 
 export interface Session {
@@ -35,7 +37,9 @@ export async function lookupAccountByUsername(
 ): Promise<Account | null> {
   return db
     .prepare(
-      `SELECT a.id, a.username, a.status
+      `SELECT a.id, a.username, a.status,
+              a.max_screenshots AS maxScreenshots,
+              a.max_storage_bytes AS maxStorageBytes
        FROM account_usernames u
        JOIN accounts a ON a.id = u.account_id
        WHERE u.username = ?`
@@ -50,7 +54,9 @@ export async function provisionGithubAccount(
 ): Promise<Account> {
   const existing = await db
     .prepare(
-      `SELECT a.id, a.username, a.status
+      `SELECT a.id, a.username, a.status,
+              a.max_screenshots AS maxScreenshots,
+              a.max_storage_bytes AS maxStorageBytes
        FROM account_identities i
        JOIN accounts a ON a.id = i.account_id
        WHERE i.provider = 'github' AND i.provider_user_id = ?`
@@ -68,6 +74,8 @@ export async function provisionGithubAccount(
     id: crypto.randomUUID(),
     username,
     status: 'active',
+    maxScreenshots: 100,
+    maxStorageBytes: 104857600,
   };
   const now = new Date().toISOString();
 

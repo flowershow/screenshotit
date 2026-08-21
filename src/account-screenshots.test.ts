@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+  findAccountScreenshot,
   getAccountScreenshotById,
   getAccountUsage,
   listAccountScreenshots,
@@ -132,5 +133,37 @@ describe('account screenshot catalog', () => {
 
     expect(screenshot?.accountId).toBe('account-1');
     expect(stmt.bind).toHaveBeenCalledWith('shot-1', 'account-1');
+  });
+
+  it('finds an existing screenshot by its logical account key', async () => {
+    const row = {
+      id: 'shot-1',
+      account_id: 'account-1',
+      target_url: 'https://example.com',
+      modifiers: 'full',
+      r2_prefix: 'prefix/',
+      byte_size: 100,
+      access_count: 0,
+      capture_count: 1,
+      created_at: 'created',
+      last_captured_at: 'captured',
+      last_accessed_at: null,
+    };
+    const stmt = statement({ first: row });
+    db.prepare.mockReturnValue(stmt);
+
+    await expect(
+      findAccountScreenshot(
+        db as D1Database,
+        'account-1',
+        'https://example.com',
+        'full'
+      )
+    ).resolves.toMatchObject({ id: 'shot-1' });
+    expect(stmt.bind).toHaveBeenCalledWith(
+      'account-1',
+      'https://example.com',
+      'full'
+    );
   });
 });

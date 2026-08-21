@@ -26,6 +26,20 @@ describe('rate limiting', () => {
       expect(allowed).toBe(true);
     });
 
+    it('scopes account refreshes independently', async () => {
+      mockBucket.head.mockResolvedValue(null);
+      await checkRefreshRateLimit(
+        mockBucket as unknown as R2Bucket,
+        'https://example.com',
+        ['full'],
+        'account-1'
+      );
+
+      expect(mockBucket.head).toHaveBeenCalledWith(
+        expect.stringContaining('ratelimit/account-1/')
+      );
+    });
+
     it('blocks refresh when already refreshed today', async () => {
       mockBucket.head.mockResolvedValue({ key: 'exists' });
       const allowed = await checkRefreshRateLimit(

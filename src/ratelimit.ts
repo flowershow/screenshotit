@@ -1,19 +1,25 @@
 // src/ratelimit.ts
-type Modifier = 'full' | 'mobile' | 'refresh';
+import type { Modifier } from './normalize';
 
-function getRateLimitKey(url: string, modifiers: Modifier[]): string {
+function getRateLimitKey(
+  url: string,
+  modifiers: Modifier[],
+  scope?: string
+): string {
   const today = new Date().toISOString().split('T')[0];
   const modifierPart =
     modifiers.filter((m) => m !== 'refresh').sort().join('-') || 'default';
-  return `ratelimit/${today}/${url}/${modifierPart}`;
+  const scopePrefix = scope ? `${scope}/` : '';
+  return `ratelimit/${scopePrefix}${today}/${url}/${modifierPart}`;
 }
 
 export async function checkRefreshRateLimit(
   bucket: R2Bucket,
   url: string,
-  modifiers: Modifier[]
+  modifiers: Modifier[],
+  scope?: string
 ): Promise<boolean> {
-  const key = getRateLimitKey(url, modifiers);
+  const key = getRateLimitKey(url, modifiers, scope);
   const existing = await bucket.head(key);
   return existing === null;
 }
@@ -21,9 +27,10 @@ export async function checkRefreshRateLimit(
 export async function recordRefresh(
   bucket: R2Bucket,
   url: string,
-  modifiers: Modifier[]
+  modifiers: Modifier[],
+  scope?: string
 ): Promise<void> {
-  const key = getRateLimitKey(url, modifiers);
+  const key = getRateLimitKey(url, modifiers, scope);
   // Store empty object, just need the key to exist
   // Auto-expires after 1 day
   await bucket.put(key, '', {

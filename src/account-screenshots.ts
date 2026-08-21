@@ -124,6 +124,25 @@ export async function getAccountScreenshotById(
   return row ? mapAccountScreenshot(row) : null;
 }
 
+export async function findAccountScreenshot(
+  db: D1Database,
+  accountId: string,
+  targetUrl: string,
+  modifiers: string
+): Promise<AccountScreenshot | null> {
+  const row = await db
+    .prepare(
+      `SELECT id, account_id, target_url, modifiers, r2_prefix, byte_size,
+              access_count, capture_count, created_at, last_captured_at,
+              last_accessed_at
+       FROM account_screenshots
+       WHERE account_id = ? AND target_url = ? AND modifiers = ?`
+    )
+    .bind(accountId, targetUrl, modifiers)
+    .first<AccountScreenshotRow>();
+  return row ? mapAccountScreenshot(row) : null;
+}
+
 export async function getAccountUsage(
   db: D1Database,
   accountId: string
