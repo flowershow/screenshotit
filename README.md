@@ -59,6 +59,19 @@ Need an `og:image` for link previews? Use `@social` to get a screenshot sized ex
 
 That's it. No image generation pipeline, no Puppeteer server, no build step. Every page on your site gets a live social preview image just by referencing its URL.
 
+## Accounts
+
+GitHub login adds an optional public username namespace without changing anonymous URLs:
+
+```
+screenshotit.app/@alice/example.com
+screenshotit.app/@alice/example.com@full
+```
+
+Anyone can view an existing account screenshot. Only the account owner can create a missing screenshot, use `@refresh`, or delete it. Account objects use an immutable internal account ID in R2, so a future username change can retain the old username as an alias without moving stored images.
+
+The dashboard at `/dashboard` lists owned screenshots, capture and access counts, storage usage, refresh links, and deletion controls. New accounts currently receive a limit of 100 logical screenshots and 100 MiB of stored account screenshots. Anonymous screenshots continue to use the shared namespace and existing behavior.
+
 ## Development
 
 **Prerequisites:**
@@ -69,7 +82,10 @@ That's it. No image generation pipeline, no Puppeteer server, no build step. Eve
 
 ```bash
 npm install
+cp .dev.vars.example .dev.vars
 ```
+
+Set the local GitHub OAuth credentials in `.dev.vars`. For local OAuth testing, create a separate development OAuth app and override `APP_ORIGIN` with the origin printed by `wrangler dev`; GitHub requires its callback URL to match `<origin>/auth/github/callback`.
 
 **Run locally:**
 
@@ -119,12 +135,29 @@ Tracking starts from the point this feature is deployed. No backfill is performe
    ```bash
    npx wrangler d1 create screenshotit-analytics
    ```
-   Copy the `database_id` from output and set it in `wrangler.toml` under `[[d1_databases]]`.
+   Copy the `database_id` from output and set it in `wrangler.jsonc` under `d1_databases`.
 
 5. **Apply D1 migrations:**
    ```bash
    npx wrangler d1 migrations apply ANALYTICS_DB --local
    npx wrangler d1 migrations apply ANALYTICS_DB --remote
+   ```
+
+6. **Create a GitHub OAuth App:**
+   - In GitHub, open Settings → Developer settings → OAuth Apps.
+   - Use `https://screenshotit.app` as the homepage URL.
+   - Use `https://screenshotit.app/auth/github/callback` as the authorization callback URL.
+   - Set the public client ID and secret as Worker secrets:
+     ```bash
+     npx wrangler secret put GITHUB_CLIENT_ID
+     npx wrangler secret put GITHUB_CLIENT_SECRET
+     ```
+   - Enter both values only at Wrangler's interactive prompts; do not commit them.
+
+7. **Validate the bundle:**
+   ```bash
+   npx wrangler types src/worker-configuration.d.ts --include-runtime false --check
+   npx wrangler deploy --dry-run
    ```
 
 ### Deploy
@@ -165,3 +198,5 @@ Built on Cloudflare's edge infrastructure:
 - **Browser Rendering API** - Headless Chromium for screenshots
 - **R2** - Object storage for cached screenshots
 - **D1** - Analytics counters for accesses and creations
+- **GitHub OAuth** - Initial account identity provider
+- **D1 accounts** - Usernames, aliases, hashed sessions, ownership, and usage statistics

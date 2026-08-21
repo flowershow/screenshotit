@@ -1,0 +1,39 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "screenshotit",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-21",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "ENVIRONMENT": "production",
+    "APP_ORIGIN": "https://screenshotit.app",
+    "SESSION_MAX_AGE_SECONDS": "2592000"
+  },
+  "r2_buckets": [
+    {
+      "binding": "SCREENSHOTS",
+      "bucket_name": "screenshotit",
+      "preview_bucket_name": "screenshotit-dev"
+    }
+  ],
+  "browser": {
+    "binding": "BROWSER",
+    "remote": true
+  },
+  "d1_databases": [
+    {
+      "binding": "ANALYTICS_DB",
+      "database_name": "screenshotit-analytics",
+      "database_id": "ceffb5a4-6f72-43c0-8825-33be21f83609",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "dev": {
+    "port": 8787,
+    "local_protocol": "http"
+  }
+}

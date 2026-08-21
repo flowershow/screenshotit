@@ -3,15 +3,10 @@ import {
   getRecentCreatedScreenshots,
   getTopScreenshots,
 } from './analytics';
-import { handleAuthRequest, type GithubAuthEnv } from './github-auth';
+import { handleAuthRequest } from './github-auth';
 import { sessionFromRequest } from './github-auth';
-import { handleDashboardRequest, type DashboardEnv } from './dashboard';
-import {
-  handleScreenshotRequest,
-  type ScreenshotHandlerEnv,
-} from './screenshot-handler';
-
-export interface Env extends GithubAuthEnv, ScreenshotHandlerEnv, DashboardEnv {}
+import { handleDashboardRequest } from './dashboard';
+import { handleScreenshotRequest } from './screenshot-handler';
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
