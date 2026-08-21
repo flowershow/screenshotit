@@ -10,16 +10,24 @@ import {
   recordScreenshotAccess,
   recordScreenshotCreated,
 } from './analytics';
+import { handleAuthRequest } from './github-auth';
 
 export interface Env {
   SCREENSHOTS: R2Bucket;
   BROWSER: Fetcher;
   ANALYTICS_DB: D1Database;
+  GITHUB_CLIENT_ID: string;
+  GITHUB_CLIENT_SECRET: string;
+  APP_ORIGIN: string;
+  SESSION_MAX_AGE_SECONDS?: string;
 }
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+
+    const authResponse = await handleAuthRequest(request, env);
+    if (authResponse) return authResponse;
 
     // Handle root path
     if (url.pathname === '/' || url.pathname === '') {

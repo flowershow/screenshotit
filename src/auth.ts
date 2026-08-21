@@ -15,6 +15,28 @@ export async function hashToken(token: string): Promise<string> {
   ).join('');
 }
 
+export async function tokensEqual(first: string, second: string): Promise<boolean> {
+  const encoder = new TextEncoder();
+  const [firstHash, secondHash] = await Promise.all([
+    crypto.subtle.digest('SHA-256', encoder.encode(first)),
+    crypto.subtle.digest('SHA-256', encoder.encode(second)),
+  ]);
+  if (typeof crypto.subtle.timingSafeEqual === 'function') {
+    return crypto.subtle.timingSafeEqual(firstHash, secondHash);
+  }
+
+  // Node's Web Crypto implementation used by Vitest does not expose the
+  // Workers timingSafeEqual extension. Both digests have a fixed length, so a
+  // full XOR comparison provides a portable constant-work fallback.
+  const firstBytes = new Uint8Array(firstHash);
+  const secondBytes = new Uint8Array(secondHash);
+  let difference = 0;
+  for (let index = 0; index < firstBytes.length; index++) {
+    difference |= firstBytes[index] ^ secondBytes[index];
+  }
+  return difference === 0;
+}
+
 export function parseCookieHeader(header: string | null): Record<string, string> {
   if (!header) return {};
   const cookies: Record<string, string> = {};
