@@ -7,6 +7,7 @@ import { handleAuthRequest } from './github-auth';
 import { sessionFromRequest } from './github-auth';
 import { handleDashboardRequest } from './dashboard';
 import { handleScreenshotRequest } from './screenshot-handler';
+import { renderChangelogPage } from './changelog';
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -34,6 +35,13 @@ export default {
           headers: { 'Content-Type': 'text/html; charset=utf-8' },
           }
         );
+      }
+
+      if (url.pathname === '/changelog') {
+        return new Response(renderChangelogPage(), {
+          status: 200,
+          headers: { 'Content-Type': 'text/html; charset=utf-8' },
+        });
       }
 
       return handleScreenshotRequest(request, env, ctx);
