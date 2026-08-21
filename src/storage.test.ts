@@ -1,12 +1,20 @@
 // src/storage.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getScreenshot, saveScreenshot, findNearestDate, ScreenshotMetadata } from './storage';
+import {
+  getScreenshot,
+  saveScreenshot,
+  findNearestDate,
+  deleteScreenshotPrefix,
+  getScreenshotPrefixSize,
+  ScreenshotMetadata,
+} from './storage';
 
 describe('storage', () => {
   let mockBucket: {
     get: ReturnType<typeof vi.fn>;
     put: ReturnType<typeof vi.fn>;
     list: ReturnType<typeof vi.fn>;
+    delete: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
@@ -14,7 +22,50 @@ describe('storage', () => {
       get: vi.fn(),
       put: vi.fn(),
       list: vi.fn(),
+      delete: vi.fn(),
     };
+  });
+
+  describe('account prefix operations', () => {
+    it('sums object sizes across list pages', async () => {
+      mockBucket.list
+        .mockResolvedValueOnce({
+          objects: [{ key: 'prefix/latest.webp', size: 10 }],
+          truncated: true,
+          cursor: 'next-page',
+        })
+        .mockResolvedValueOnce({
+          objects: [{ key: 'prefix/2026-08-21.webp', size: 20 }],
+          truncated: false,
+        });
+
+      await expect(
+        getScreenshotPrefixSize(mockBucket as unknown as R2Bucket, 'prefix/')
+      ).resolves.toBe(30);
+      expect(mockBucket.list).toHaveBeenLastCalledWith({
+        prefix: 'prefix/',
+        cursor: 'next-page',
+      });
+    });
+
+    it('deletes only explicit keys returned for the exact prefix', async () => {
+      mockBucket.list.mockResolvedValue({
+        objects: [
+          { key: 'prefix/latest.webp', size: 10 },
+          { key: 'prefix/2026-08-21.webp', size: 20 },
+        ],
+        truncated: false,
+      });
+      mockBucket.delete.mockResolvedValue(undefined);
+
+      await expect(
+        deleteScreenshotPrefix(mockBucket as unknown as R2Bucket, 'prefix/')
+      ).resolves.toEqual({ objectCount: 2, byteSize: 30 });
+      expect(mockBucket.delete).toHaveBeenCalledWith([
+        'prefix/latest.webp',
+        'prefix/2026-08-21.webp',
+      ]);
+    });
   });
 
   describe('getScreenshot', () => {

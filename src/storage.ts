@@ -71,3 +71,40 @@ export async function findNearestDate(
 
   return nearest;
 }
+
+export async function getScreenshotPrefixSize(
+  bucket: R2Bucket,
+  prefix: string
+): Promise<number> {
+  const objects = await listScreenshotPrefix(bucket, prefix);
+  return objects.reduce((total, object) => total + object.size, 0);
+}
+
+export async function deleteScreenshotPrefix(
+  bucket: R2Bucket,
+  prefix: string
+): Promise<{ objectCount: number; byteSize: number }> {
+  const objects = await listScreenshotPrefix(bucket, prefix);
+  const keys = objects.map((object) => object.key);
+  for (let index = 0; index < keys.length; index += 1000) {
+    await bucket.delete(keys.slice(index, index + 1000));
+  }
+  return {
+    objectCount: objects.length,
+    byteSize: objects.reduce((total, object) => total + object.size, 0),
+  };
+}
+
+async function listScreenshotPrefix(
+  bucket: R2Bucket,
+  prefix: string
+): Promise<R2Object[]> {
+  const objects: R2Object[] = [];
+  let cursor: string | undefined;
+  do {
+    const page = await bucket.list({ prefix, ...(cursor ? { cursor } : {}) });
+    objects.push(...page.objects);
+    cursor = page.truncated ? page.cursor : undefined;
+  } while (cursor);
+  return objects;
+}
